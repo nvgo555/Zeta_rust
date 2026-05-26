@@ -6,7 +6,7 @@
 
 ## Document Purpose
 
-This document provides a rigorous, line-by-line description of every module in the Zeta p-Adic Integer AI system. All descriptions are derived directly from the source code files; no external assumptions, no hallucinated functionality, and no ad hoc additions are included. Each module entry contains: (1) the exact mathematical role, (2) all public classes and functions with their signatures, (3) tensor shapes and data types, (4) dependencies on other Zeta modules, and (5) the precise connection to the overall pipeline.
+This document constitutes the complete algebraic specification of the Zeta system at the module level. Every definition, tensor shape, and functional contract recorded here is extracted directly from the source code; nothing is inferred, nothing is assumed, and nothing is added from external knowledge. The description of each module proceeds from its mathematical role through its public interface, its internal data structures, its dependencies on the ring-theoretic substrate, and its position within the end-to-end pipeline. The reader may treat this document as the ground truth against which any implementation claim is to be verified.
 
 ---
 
