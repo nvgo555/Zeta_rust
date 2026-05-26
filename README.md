@@ -24,7 +24,7 @@
 The engine lives in the cubic p-adic integer ring
 
 ```
-R = Z_13[η] / (η³ − η² − η − 1)
+Z_13[η] / (η³ − η² − η − 1)
 ```
 
 | Property | Value |
