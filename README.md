@@ -8,11 +8,11 @@
 
 Zeta is a self-contained artificial intelligence system whose entire computational universe is constructed within the finite ring
 
-Z_13eta  (\\eta^3 - \\eta^2 - \\eta - 1)
+$$\\mathbb{Z}_{13}[\\eta] \\;\\big/\\; (\\eta^3 - \\eta^2 - \\eta - 1)$$
 
-Every tensor, embedding, state transition, kernel evaluation, and learning update is an element of this ring. The system contains no floating-point arithmetic, no gradient descent, no Euclidean metric structures, and no learned real-valued parameters. Instead, dynamics are governed by the unimodular matrix T_3 SL3Z, attention by an ultrametric tree kernel derived from the $13$-adic valuation, and learning by the Buchberger-Nullstellensatz algorithm operating on polynomial ideals.
+Every tensor, embedding, state transition, kernel evaluation, and learning update is an element of this ring. The system contains no floating-point arithmetic, no gradient descent, no Euclidean metric structures, and no learned real-valued parameters. Instead, dynamics are governed by the unimodular matrix $T_3 \\in \\mathrm{SL}(3, \\mathbb{Z})$, attention by an ultrametric tree kernel derived from the $13$-adic valuation, and learning by the Buchberger-Nullstellensatz algorithm operating on polynomial ideals.
 
-The ring Z13eta has 2197 elements. Its unit group has order 2016, arising from the Chinese Remainder Theorem decomposition Z13eta. F_13 F_169. The multiplicative order of eta is 168, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over F_13 and a two-dimensional subdominant channel over F_169, with the full symmetry of the Galois group S_3 acting on the latter.
+The ring $\\mathbb{Z}_{13}[\\eta]$ has $2197$ elements. Its unit group has order $2016$, arising from the Chinese Remainder Theorem decomposition $\\mathbb{Z}_{13}[\\eta] \\cong \\mathbb{F}_{13} \\times \\mathbb{F}_{169}$. The multiplicative order of $\\eta$ is $168$, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over $\\mathbb{F}_{13}$ and a two-dimensional subdominant channel over $\\mathbb{F}_{169}$, with the full symmetry of the Galois group $S_3$ acting on the latter.
 
 This document specifies the mathematical foundations, architectural components, algorithmic procedures, and operational semantics of the Zeta system.
 
