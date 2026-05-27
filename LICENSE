@@ -1,6 +1,10 @@
 Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
-Copyright (c) 2026 Dávid Navrátil
+Copyright (c) 2026 Dávid Navrátil (Original Author)
+Copyright (c) 2026 Unofficial Experimental Fork Maintainer
+
+**IMPORTANT: This is an EXPERIMENTAL UNOFFICIAL fork of the original Zeta Edit project.**
+This fork is not affiliated with, endorsed by, or maintained by the original author.
 
 You are free to:
 
@@ -28,6 +32,7 @@ Notices:
   You do not have to comply with the license for elements of the material
   in the public domain or where your use is permitted by an applicable
   exception or limitation.
+
 
   No warranties are given. The license may not give you all of the
   permissions necessary for your intended use. For example, other rights
