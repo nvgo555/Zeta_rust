@@ -1,0 +1,10 @@
+[package]
+name = "zeta-rs"
+version = "7.0.0"
+edition = "2021"
+authors = ["Dávid Navrátil <david.navratil2016@gmail.com>"]
+
+[dependencies]
+ndarray = "0.15.6"
+rayon = "1.8.0"
+lazy_static = "1.4.0"
