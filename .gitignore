@@ -32,4 +32,7 @@ htmlcov/
 # Distribution / packaging
 *.egg
 *.whl
-```
+
+# Rust build artifacts
+/target/
+**/*.rs.bk```

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["alg_dropout","born_norm","laplacian","ring_attend","ring_lin","w_seed"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["attention","axioms","buchberger","constants","embed","gqm","hilbert","kernel","linear","model","ntt","ring","spectral","witt"]};

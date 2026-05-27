@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["P1_MAT","P23_MAT"],"fn":["val_13"],"struct":["ETA_IPOW","ETA_POW","INV_TBL","S3_MATS","S3_MUL","T3_POW","T3_ROWS","VAL_LUT"]};

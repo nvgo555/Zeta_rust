@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["NTT_SCALAR","NTT_VALID"],"fn":["mod_inv","mod_pow"],"struct":["Ntt"]};

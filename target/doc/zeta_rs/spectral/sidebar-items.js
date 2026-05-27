@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["proj","t3n","t3n_s3"],"struct":["S3Galois","SpectralDecomposition","SylvesterProjectors"]};
