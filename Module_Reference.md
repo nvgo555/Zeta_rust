@@ -19,73 +19,73 @@ This document constitutes the complete algebraic specification of the Zeta syste
 ### Tier 1: Foundation (Constants, Ring, Spectral)
 | Module | File | Role |
 |--------|------|------|
-| constants | `constants.py` | Immutable precomputed algebraic tables |
-| ring | `ring.py` | All arithmetic in Z_13[eta] and F_169 |
-| spectral | `spectral.py` | T3 orbit, Sylvester projectors, S3 Galois |
+| constants | `constants.rs` | Immutable precomputed algebraic tables |
+| ring | `ring.rs` | All arithmetic in Z_13[eta] and F_169 |
+| spectral | `spectral.rs` | T3 orbit, Sylvester projectors, S3 Galois |
 
 ### Tier 2: Geometry and Kernel
 | Module | File | Role |
 |--------|------|------|
-| kernel | `kernel.py` | Ultrametric Bruhat-Tits tree kernel |
-| laplacian | `laplacian.py` | Vladimirov p-adic Laplacian |
-| linear | `linear.py` | Shared ring-linear operations |
-| hilbert | `hilbert.py` | Hilbert-eta inner product and layer norm |
+| kernel | `kernel.rs` | Ultrametric Bruhat-Tits tree kernel |
+| laplacian | `laplacian.rs` | Vladimirov p-adic Laplacian |
+| linear | `linear.rs` | Shared ring-linear operations |
+| hilbert | `hilbert.rs` | Hilbert-eta inner product and layer norm |
 
 ### Tier 3: Transforms and Arithmetic
 | Module | File | Role |
 |--------|------|------|
-| ntt | `ntt.py` | Number Theoretic Transform over Z_13[eta] |
-| witt | `witt.py` | Witt vector arithmetic |
-| hensel | `hensel.py` | Hensel lifting and empirical I/O |
-| mahler | `mahler.py` | Mahler expansion and finite differences |
-| teichmuller | `teichmuller.py` | Teichmüller lifts |
+| ntt | `ntt.rs` | Number Theoretic Transform over Z_13[eta] |
+| witt | `witt.rs` | Witt vector arithmetic |
+| hensel | `hensel.rs` | Hensel lifting and empirical I/O |
+| mahler | `mahler.rs` | Mahler expansion and finite differences |
+| teichmuller | `teichmuller.rs` | Teichmüller lifts |
 
 ### Tier 4: Quantum and Spectral Physics
 | Module | File | Role |
 |--------|------|------|
-| gqm | `gqm.py` | Geometric Quantum Mechanics states and memory |
-| zeta_func | `zeta_func.py` | Spectral zeta functions and eigenvalue flows |
-| dirac | `dirac.py` | Adelic Dirac operator and p-adic RH |
-| berry | `berry.py` | Berry connection and algebraic SVD proxy |
-| entanglement | `entanglement.py` | Holographic entropy formulas |
-| crystal | `crystal.py` | Crystal lattice structure factor |
+| gqm | `gqm.rs` | Geometric Quantum Mechanics states and memory |
+| zeta_func | `zeta_func.rs` | Spectral zeta functions and eigenvalue flows |
+| dirac | `dirac.rs` | Adelic Dirac operator and p-adic RH |
+| berry | `berry.rs` | Berry connection and algebraic SVD proxy |
+| entanglement | `entanglement.rs` | Holographic entropy formulas |
+| crystal | `crystal.rs` | Crystal lattice structure factor |
 
 ### Tier 5: Model, Attention, Hybrid
 | Module | File | Role |
 |--------|------|------|
-| embed | `embed.py` | Deterministic token and positional embeddings |
-| attention | `attention.py` | Spectral attention with tree kernel |
-| hybrid | `hybrid.py` | S3 parallel conjugate orbit attention |
-| model | `model.py` | Complete Zeta language model |
-| mera | `mera.py` | MERA tensor network coarse-graining |
+| embed | `embed.rs` | Deterministic token and positional embeddings |
+| attention | `attention.rs` | Spectral attention with tree kernel |
+| hybrid | `hybrid.rs` | S3 parallel conjugate orbit attention |
+| model | `model.rs` | Complete Zeta language model |
+| mera | `mera.rs` | MERA tensor network coarse-graining |
 
 ### Tier 6: Learning and Autonomy
 | Module | File | Role |
 |--------|------|------|
-| buchberger | `buchberger.py` | Buchberger-Nullstellensatz training engine |
-| goal | `goal.py` | T3 orbit goal planning |
-| entropy | `entropy.py` | Entropy monitoring and Hensel trigger |
-| scaler | `scaler.py` | Autonomous scaling decisions |
-| autonomy | `autonomy.py` | Closed-loop autonomous control |
+| buchberger | `buchberger.rs` | Buchberger-Nullstellensatz training engine |
+| goal | `goal.rs` | T3 orbit goal planning |
+| entropy | `entropy.rs` | Entropy monitoring and Hensel trigger |
+| scaler | `scaler.rs` | Autonomous scaling decisions |
+| autonomy | `autonomy.rs` | Closed-loop autonomous control |
 
 ### Tier 7: Planning and Control
 | Module | File | Role |
 |--------|------|------|
-| orbit | `orbit.py` | T3 orbit trajectory planner |
-| reversible | `reversible.py` | Time-reversible encode/decode |
-| rollback | `rollback.py` | Quantum error detection and correction |
-| counterfactual | `counterfactual.py` | Parallel trajectory exploration |
-| ardt | `ardt.py` | 5-step algebraic reasoning chain |
+| orbit | `orbit.rs` | T3 orbit trajectory planner |
+| reversible | `reversible.rs` | Time-reversible encode/decode |
+| rollback | `rollback.rs` | Quantum error detection and correction |
+| counterfactual | `counterfactual.rs` | Parallel trajectory exploration |
+| ardt | `ardt.rs` | 5-step algebraic reasoning chain |
 
 ### Tier 8: System and I/O
 | Module | File | Role |
 |--------|------|------|
-| runtime | `runtime.py` | Device manager and system runtime |
-| axioms | `axioms.py` | Runtime axiom verification (A001–A030) |
-| sampler | `sampler.py` | Buchberger batch accuracy estimation |
-| tokenizer | `tokenizer.py` | Byte, DNA codon, and trigram tokenizers |
-| adelic | `adelic.py` | Adelic norm and strong approximation |
-| __init__ | `__init__.py` | Package exports and version |
+| runtime | `runtime.rs` | Device manager and system runtime |
+| axioms | `axioms.rs` | Runtime axiom verification (A001–A030) |
+| sampler | `sampler.rs` | Buchberger batch accuracy estimation |
+| tokenizer | `tokenizer.rs` | Byte, DNA codon, and trigram tokenizers |
+| adelic | `adelic.rs` | Adelic norm and strong approximation |
+| __init__ | `__init__.rs` | Package exports and version |
 
 ---
 
@@ -94,15 +94,15 @@ This document constitutes the complete algebraic specification of the Zeta syste
 
 ---
 
-### 1.1 `constants.py` — Global Algebraic Tables and Configuration
+### 1.1 `constants.rs` — Global Algebraic Tables and Configuration
 
-**File:** `zeta/constants.py`
+**File:** `src/constants.rs`
 
-**Purpose.** This module is the single source of truth for all precomputed immutable tables. It is imported by every other module. All tables are built once at import time via pure-Python constructors and stored as `torch.Tensor` objects. No table is ever rebuilt at runtime.
+**Purpose.** This module is the single source of truth for all precomputed immutable tables. It is imported by every other module. All tables are built once at import time via pure-Rust constructors and stored as `torch.Tensor` objects. No table is ever rebuilt at runtime.
 
 **Configuration Class.**
 
-```python
+```Rust
 class ZetaConfig:
     P: int = 13              # ring characteristic
     ORD: int = 168           # multiplicative order of eta
@@ -143,8 +143,8 @@ class ZetaConfig:
 
 **Key Functions.**
 
-- `_ring_mul_py(a, b) -> tuple` — Pure-Python ring multiplication used only during table construction. Computes polynomial product with reduction eta^3 = eta^2 + eta + 1 and eta^4 = 2*eta^2 + 2*eta + 1.
-- `_mat_mul_py(A, B) -> list` — Pure-Python 3x3 matrix multiplication mod 13.
+- `_ring_mul_py(a, b) -> tuple` — Pure-Rust ring multiplication used only during table construction. Computes polynomial product with reduction eta^3 = eta^2 + eta + 1 and eta^4 = 2*eta^2 + 2*eta + 1.
+- `_mat_mul_py(A, B) -> list` — Pure-Rust 3x3 matrix multiplication mod 13.
 - `_build_inv_table() -> Tensor` — Builds the (13,13,13,3) inverse table. For each element (a0,a1,a2), checks if it is a unit via CRT (phi1 != 0 AND phi2 != (0,0)). Non-units map to (0,0,0). Units are inverted by binary exponentiation to power 167.
 - `_build_ntt(N) -> None` — Precomputes NTT twiddle matrices for valid sizes [1,2,3,4,6,12]. Scalar twiddles use primitive roots; ring twiddles use ETA_POW/ETA_IPOW.
 - `delta_max(L) -> int` — O(1) Tribonacci mixing time lookup. For L > 512, computes on-the-fly via Tribonacci iteration.
@@ -155,11 +155,11 @@ class ZetaConfig:
 
 ---
 
-### 1.2 `ring.py` — Ring Arithmetic, CRT, and F_169 Field Operations
+### 1.2 `ring.rs` — Ring Arithmetic, CRT, and F_169 Field Operations
 
-**File:** `zeta/ring.py`
+**File:** `src/ring.rs`
 
-**Purpose.** Implements all arithmetic in Z_13[eta] / (eta^3 - eta^2 - eta - 1), including the CRT decomposition into F_13 x F_169 and the quadratic extension F_169 = F_13[alpha] / (alpha^2 + 6*alpha + 2). Every operation is fully vectorized via PyTorch tensor operations; no Python loops iterate over data elements.
+**Purpose.** Implements all arithmetic in Z_13[eta] / (eta^3 - eta^2 - eta - 1), including the CRT decomposition into F_13 x F_169 and the quadratic extension F_169 = F_13[alpha] / (alpha^2 + 6*alpha + 2). Every operation is fully vectorized via PyTorch tensor operations; no Rust loops iterate over data elements.
 
 **Class `Z13` (static methods).**
 
@@ -206,9 +206,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 1.3 `spectral.py` — T3 Orbit, Sylvester Projectors, and S3 Galois Symmetry
+### 1.3 `spectral.rs` — T3 Orbit, Sylvester Projectors, and S3 Galois Symmetry
 
-**File:** `zeta/spectral.py`
+**File:** `src/spectral.rs`
 
 **Purpose.** Contains the spectral decomposition of the sole evolution matrix T3 in SL(3,Z), the Sylvester projectors P1 and P23, and the S3 Galois group action. All operations are O(1) table lookups or matrix multiplications.
 
@@ -245,7 +245,7 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 **Dependencies.** `constants` (T3_POW, P1_MAT, P23_MAT, S3_MATS, _S3_MUL), `ring` (Z13).
 
-**Connection to Pipeline.** `proj` and `t3n` are called in every layer of the model. `SylvesterProjectors.split` is the first operation in `SpectralAttention.forward`. `S3Galois` is used by `S3ParallelAttention` and `hybrid.py`.
+**Connection to Pipeline.** `proj` and `t3n` are called in every layer of the model. `SylvesterProjectors.split` is the first operation in `SpectralAttention.forward`. `S3Galois` is used by `S3ParallelAttention` and `hybrid.rs`.
 
 ---
 
@@ -254,9 +254,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 2.1 `kernel.py` — The Ultrametric Kernel via Bruhat-Tits Tree
+### 2.1 `kernel.rs` — The Ultrametric Kernel via Bruhat-Tits Tree
 
-**File:** `zeta/kernel.py`
+**File:** `src/kernel.rs`
 
 **Purpose.** Implements the sole token interaction kernel of the system: the ultrametric tree kernel derived from the 13-adic valuation. The kernel NEVER materializes an L x L matrix. It operates via hierarchical tree aggregation with O(L * log_13(L)) time and O(L) memory.
 
@@ -299,9 +299,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 2.2 `laplacian.py` — Vladimirov p-adic Laplacian
+### 2.2 `laplacian.rs` — Vladimirov p-adic Laplacian
 
-**File:** `zeta/laplacian.py`
+**File:** `src/laplacian.rs`
 
 **Purpose.** Implements the p-adic Laplacian operator on the discrete token set {0, ..., L-1} with weights from the ultrametric kernel. The Laplacian matrix is L = W - diag(rowsum) where W[i,j] = eta^{v_13(|i-j|)}.
 
@@ -316,15 +316,15 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 **Dependencies.** `constants` (P, ORD, ETA_POW, ZERO_R, _VAL_LUT), `ring` (Z13), `kernel` (PAdicKernel._val), `ntt` (NTT).
 
-**Connection to Pipeline.** Used by `linear.laplacian` for discrete smoothing in attention layers. The NTT eigendecomposition connects to spectral analysis in `zeta_func.py`.
+**Connection to Pipeline.** Used by `linear.laplacian` for discrete smoothing in attention layers. The NTT eigendecomposition connects to spectral analysis in `zeta_func.rs`.
 
 ---
 
-### 2.3 `linear.py` — Shared Ring Linear Algebra Operations
+### 2.3 `linear.rs` — Shared Ring Linear Algebra Operations
 
-**File:** `zeta/linear.py`
+**File:** `src/linear.rs`
 
-**Purpose.** Provides common linear operations used across all model components. All functions are fully vectorized; no Python loops over sequence positions.
+**Purpose.** Provides common linear operations used across all model components. All functions are fully vectorized; no Rust loops over sequence positions.
 
 **Functions.**
 
@@ -343,9 +343,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 2.4 `hilbert.py` — Hilbert-eta Inner Product and Algebraic Layer Norm
+### 2.4 `hilbert.rs` — Hilbert-eta Inner Product and Algebraic Layer Norm
 
-**File:** `zeta/hilbert.py`
+**File:** `src/hilbert.rs`
 
 **Purpose.** Defines the inner product <u,v>_eta = sum_k Z13.mul(u_k, v_k) * eta^{-k} and algebraic layer normalization x * ||x||_eta^{-1}. Replaces Euclidean LayerNorm.
 
@@ -370,9 +370,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 3.1 `ntt.py` — Number Theoretic Transform over Z_13[eta]
+### 3.1 `ntt.rs` — Number Theoretic Transform over Z_13[eta]
 
-**File:** `zeta/ntt.py`
+**File:** `src/ntt.rs`
 
 **Purpose.** Implements the Number Theoretic Transform over the cubic p-adic ring. Valid sizes are divisors of 168 with N mod 13 != 0: [1, 2, 3, 4, 6, 12]. Two paths: scalar (N | 12) with twiddles in F_13 via einsum, and ring (N ∤ 12) with twiddles in Z_13[eta] via broadcast ring_mul. All transforms are O(N log N) and fully vectorized.
 
@@ -398,9 +398,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 3.2 `witt.py` — Witt Vector Arithmetic
+### 3.2 `witt.rs` — Witt Vector Arithmetic
 
-**File:** `zeta/witt.py`
+**File:** `src/witt.rs`
 
 **Purpose.** Implements Witt vector arithmetic of precision k over the cubic p-adic ring. Witt vectors provide a canonical lift from the residue field to characteristic zero without floating-point arithmetic. Operations include addition with carry propagation, multiplication via anti-diagonal scatter-add, and Newton inversion.
 
@@ -430,9 +430,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 3.3 `hensel.py` — Hensel Lifting of the Tribonacci Root
+### 3.3 `hensel.rs` — Hensel Lifting of the Tribonacci Root
 
-**File:** `zeta/hensel.py`
+**File:** `src/hensel.rs`
 
 **Purpose.** Constructs the exact root eta of x^3 - x^2 - x - 1 modulo 13^k via Newton iteration. Links Hensel lifting to Witt vector arithmetic through base-13 digits.
 
@@ -459,9 +459,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 3.4 `mahler.py` — Mahler Expansion in Z_13[eta]
+### 3.4 `mahler.rs` — Mahler Expansion in Z_13[eta]
 
-**File:** `zeta/mahler.py`
+**File:** `src/mahler.rs`
 
 **Purpose.** Computes Mahler coefficients Delta^k f(0) / k! for functions over the p-adic ring. Finite differences are vectorized via binomial matrix construction. The NTT bridge connects Mahler expansion to frequency-domain analysis.
 
@@ -483,9 +483,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 3.5 `teichmuller.py` — Teichmüller Lifts
+### 3.5 `teichmuller.rs` — Teichmüller Lifts
 
-**File:** `zeta/teichmuller.py`
+**File:** `src/teichmuller.rs`
 
 **Purpose.** Implements the multiplicative Teichmüller section tau(a) = (a, 0, ..., 0) in Witt vectors, satisfying tau(a*b) = tau(a)*tau(b).
 
@@ -509,9 +509,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.1 `gqm.py` — Geometric Quantum Mechanics in Z_13[eta]
+### 4.1 `gqm.rs` — Geometric Quantum Mechanics in Z_13[eta]
 
-**File:** `zeta/gqm.py`
+**File:** `src/gqm.rs`
 
 **Purpose.** Implements quantum states, density matrices, and quantum cache over the cubic p-adic ring. All operations use ring arithmetic (Z13.mul, Z13.trace, Z13.norm) — no Hilbert space, no complex numbers. The Born rule uses algebraic norm N(c_k) rather than |c_k|^2.
 
@@ -556,9 +556,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.2 `zeta_func.py` — Spectral Zeta Functions and Eigenvalue Flows
+### 4.2 `zeta_func.rs` — Spectral Zeta Functions and Eigenvalue Flows
 
-**File:** `zeta/zeta_func.py`
+**File:** `src/zeta_func.rs`
 
 **Purpose.** Implements the spectral zeta function zeta_eta(s) over the Tribonacci orbit, together with the dominant and subdominant eigenvalue flows of T3.
 
@@ -592,9 +592,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.3 `dirac.py` — Adelic Dirac Operator and p-adic Riemann Hypothesis
+### 4.3 `dirac.rs` — Adelic Dirac Operator and p-adic Riemann Hypothesis
 
-**File:** `zeta/dirac.py`
+**File:** `src/dirac.rs`
 
 **Purpose.** Implements the antisymmetric Dirac operator on the token lattice and provides the p-adic Riemann Hypothesis verification framework.
 
@@ -623,9 +623,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.4 `berry.py` — Berry Phase and Algebraic SVD Proxy
+### 4.4 `berry.rs` — Berry Phase and Algebraic SVD Proxy
 
-**File:** `zeta/berry.py`
+**File:** `src/berry.rs`
 
 **Purpose.** Computes the Berry connection via Sylvester P1 projectors and provides an algebraic SVD proxy through the NTT power spectrum. No Euclidean singular value decomposition is used.
 
@@ -644,9 +644,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.5 `entanglement.py` — Discrete Holographic Entanglement in SL(3,Z)
+### 4.5 `entanglement.rs` — Discrete Holographic Entanglement in SL(3,Z)
 
-**File:** `zeta/entanglement.py`
+**File:** `src/entanglement.rs`
 
 **Purpose.** Implements holographic entropy formulas over the p-adic ring. The central charge Delta = 2 mod 13 connects to the Ryu-Takayanagi formula, Page curve, and wormhole entropy.
 
@@ -666,9 +666,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 4.6 `crystal.py` — Crystal Lattice in Z_13[eta]
+### 4.6 `crystal.rs` — Crystal Lattice in Z_13[eta]
 
-**File:** `zeta/crystal.py`
+**File:** `src/crystal.rs`
 
 **Purpose.** Treats Z_13[eta] as a 3D lattice {1, eta, eta^2} over Z_13. Computes structure factor via NTT and Voronoi decomposition via p-adic valuation.
 
@@ -693,9 +693,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 5.1 `embed.py` — Token Embedding and Positional Encoding
+### 5.1 `embed.rs` — Token Embedding and Positional Encoding
 
-**File:** `zeta/embed.py`
+**File:** `src/embed.rs`
 
 **Purpose.** Provides deterministic embeddings without learned parameters. Both embeddings are constructed from precomputed ETA_POW tables. No nn.Parameter is used.
 
@@ -717,9 +717,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 5.2 `attention.py` — Spectral Attention via Bruhat-Tits Tree
+### 5.2 `attention.rs` — Spectral Attention via Bruhat-Tits Tree
 
-**File:** `zeta/attention.py`
+**File:** `src/attention.rs`
 
 **Purpose.** The sole attention mechanism of the Zeta engine. Combines: (1) Sylvester split into dominant (P1, 1D) and subdominant (P23, 2D) channels, (2) THE ONLY KERNEL — Bruhat-Tits tree mixing via PAdicKernel, (3) local Q/K/V projections (pointwise along D, never L×L), (4) Born normalization replacing softmax.
 
@@ -760,9 +760,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 5.3 `hybrid.py` — S3 Parallel Hybrid Mode
+### 5.3 `hybrid.rs` — S3 Parallel Hybrid Mode
 
-**File:** `zeta/hybrid.py`
+**File:** `src/hybrid.rs`
 
 **Purpose.** Runs all 6 S3 conjugate orbits simultaneously in a single forward pass. Each token is evolved along 6 independent T3^n·S3_g paths, then combined via the S3 Casimir (sum over all Galois images). Provides 6× information bandwidth without increasing sequence length.
 
@@ -788,9 +788,9 @@ c2 = a0*b2 + a1*b1 + a2*b0 + a1*b2 + a2*b1 + 2*a2*b2
 
 ---
 
-### 5.4 `model.py` — Zeta p-Adic Language Model
+### 5.4 `model.rs` — Zeta p-Adic Language Model
 
-**File:** `zeta/model.py`
+**File:** `src/model.rs`
 
 **Purpose.** The complete Zeta language model. Architecture: embed -> TatePE -> N × (t3n/S3 evolution + SpectralAttention) -> multi-Witt head. Contains multi-layer Witt forward, S3 conjugate orbits, convergent decay, and autonomous Hensel lift.
 
@@ -853,9 +853,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 5.5 `mera.py` — MERA Tensor Network in Z_13[eta]
+### 5.5 `mera.rs` — MERA Tensor Network in Z_13[eta]
 
-**File:** `zeta/mera.py`
+**File:** `src/mera.rs`
 
 **Purpose.** Implements Multi-scale Entanglement Renormalization Ansatz coarse-graining over the p-adic ring. Each level groups pairs of tokens via ring addition followed by T3^{2^k} evolution.
 
@@ -889,9 +889,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 6.1 `buchberger.py` — Buchberger-Nullstellensatz Algebraic Learning Engine
+### 6.1 `buchberger.rs` — Buchberger-Nullstellensatz Algebraic Learning Engine
 
-**File:** `zeta/buchberger.py`
+**File:** `src/buchberger.rs`
 
 **Purpose.** Implements genuine algebraic learning without gradient descent. For each token position (b,l), the error polynomial in Z_13[eta][y] is e_{b,l} = (target - pred) embedded as (delta, 0, 0). The correction Delta_head is computed from the witness via the input activations x.
 
@@ -915,7 +915,7 @@ head = (active * weights).sum(2) % P
 8. **Adaptive scale:** if scale provided, delta = delta * scale
 9. **Temporal phase:** delta = delta * eta^{7*step} — phase factor from dominant eigenvalue orbit
 
-**Complexity.** O(B * L * D + D * V) time. Zero Python loops over sequence positions.
+**Complexity.** O(B * L * D + D * V) time. Zero Rust loops over sequence positions.
 
 **Dependencies.** `constants` (P, ORD, ETA_POW, ZetaConfig), `ring` (Z13).
 
@@ -923,9 +923,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 6.2 `goal.py` — Goal-Directed Orbit Planning
+### 6.2 `goal.rs` — Goal-Directed Orbit Planning
 
-**File:** `zeta/goal.py`
+**File:** `src/goal.rs`
 
 **Purpose.** Implements goal-directed behavior purely algebraically. Distance metric: d_goal(|Psi>, |C>) = N(P1 * (|Psi> - |C>)) mod 13. Planning searches the T3 orbit {T3^n * |Psi>} for the smallest n and selects the processing channel.
 
@@ -957,9 +957,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 6.3 `entropy.py` — Entropic Monitoring and Hensel Catastrophe Trigger
+### 6.3 `entropy.rs` — Entropic Monitoring and Hensel Catastrophe Trigger
 
-**File:** `zeta/entropy.py`
+**File:** `src/entropy.rs`
 
 **Purpose.** Monitors the entropy of the self-state and triggers a Witt lift (precision escalation) when the entropy barrier S_max is hit.
 
@@ -979,9 +979,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 6.4 `scaler.py` — Autonomous Scaling Engine
+### 6.4 `scaler.rs` — Autonomous Scaling Engine
 
-**File:** `zeta/scaler.py`
+**File:** `src/scaler.rs`
 
 **Purpose.** Manages automatic scaling of the Zeta engine based on internal state metrics: entropy, error rate, and orbit saturation. No external hyperparameters. Scaling mechanisms: multi-layer Witt head, S3 conjugate orbits, dynamic MERA depth, Hensel precision lift.
 
@@ -1014,9 +1014,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 6.5 `autonomy.py` — Full Autonomy Cycle with Autonomous Scaling
+### 6.5 `autonomy.rs` — Full Autonomy Cycle with Autonomous Scaling
 
-**File:** `zeta/autonomy.py`
+**File:** `src/autonomy.rs`
 
 **Purpose.** Orchestrates the complete closed-loop autonomous cycle: persistent self, goal planning, entropy monitoring, automatic scaling, and reflection.
 
@@ -1062,9 +1062,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 7.1 `orbit.py` — T3 Orbit Planner
+### 7.1 `orbit.rs` — T3 Orbit Planner
 
-**File:** `zeta/orbit.py`
+**File:** `src/orbit.rs`
 
 **Purpose.** Plans trajectories in the T3 orbit space. Given a current state and a goal state, finds the smallest N in {0..167} such that T3^N * state = goal. All 168 T3 powers are tested simultaneously via vectorized broadcast.
 
@@ -1088,9 +1088,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 7.2 `reversible.py` — Time-Reversible Sequence Transform
+### 7.2 `reversible.rs` — Time-Reversible Sequence Transform
 
-**File:** `zeta/reversible.py`
+**File:** `src/reversible.rs`
 
 **Purpose.** Implements invertible encoding and decoding via the T3 orbit. The roundtrip property decode(encode(x)) = x holds exactly, providing time reversibility.
 
@@ -1110,9 +1110,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 7.3 `rollback.py` — Quantum Rollback and Error Correction
+### 7.3 `rollback.rs` — Quantum Rollback and Error Correction
 
-**File:** `zeta/rollback.py`
+**File:** `src/rollback.rs`
 
 **Purpose.** Implements algebraic error detection and correction. Detection: pred != label (mod 13). Correction: head += eta^{step} — single orbital step.
 
@@ -1131,9 +1131,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 7.4 `counterfactual.py` — Counterfactual Trajectory Exploration
+### 7.4 `counterfactual.rs` — Counterfactual Trajectory Exploration
 
-**File:** `zeta/counterfactual.py`
+**File:** `src/counterfactual.rs`
 
 **Purpose.** Explores parallel trajectories in the T3 orbit space. Each branch applies a different T3^k to the same initial state. The best branch is selected via ultrametric distance.
 
@@ -1151,9 +1151,9 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 7.5 `ardt.py` — Algebraic Reasoning and Decision Transformer
+### 7.5 `ardt.rs` — Algebraic Reasoning and Decision Transformer
 
-**File:** `zeta/ardt.py`
+**File:** `src/ardt.rs`
 
 **Purpose.** Defines the ARDT architecture: perceive -> reason -> plan -> act -> verify. Each layer uses existing algebraic modules without standalone arithmetic.
 
@@ -1179,15 +1179,15 @@ head = (active * weights).sum(2) % P
 
 ---
 
-### 8.1 `runtime.py` — Device Manager and System Runtime
+### 8.1 `runtime.rs` — Device Manager and System Runtime
 
-**File:** `zeta/runtime.py`
+**File:** `src/runtime.rs`
 
 **Purpose.** Provides the single entry point for the Zeta engine. Manages device-local copies of all precomputed tables and orchestrates forward pass, training, benchmarking, and Riemann Hypothesis verification.
 
 **Class `ZetaDevice(nn.Module)`.**
 
-**Buffers.** All precomputed tables from `constants.py` registered as nn.Buffers:
+**Buffers.** All precomputed tables from `constants.rs` registered as nn.Buffers:
 - eta_pow, eta_ipow, t3_pow, inv_tbl, p1_mat, p23_mat, v_eig, w_eig, s3_mats, val_lut, one_r, zero_r
 - For each NTT size n in [1,2,3,4,6,12]: ntt_fwd_n, ntt_inv_n
 
@@ -1228,9 +1228,9 @@ Measures: forward_ms, ring_mul_us, ring_inv_us, t3_lookup_us, kernel_tree_ms, nt
 
 ---
 
-### 8.2 `axioms.py` — Runtime Axiom Verification
+### 8.2 `axioms.rs` — Runtime Axiom Verification
 
-**File:** `zeta/axioms.py`
+**File:** `src/axioms.rs`
 
 **Purpose.** Verifies 30 runtime axioms (A001–A030) organized into 10 categories. All axioms must pass for the engine state to be valid.
 
@@ -1279,9 +1279,9 @@ Measures: forward_ms, ring_mul_us, ring_inv_us, t3_lookup_us, kernel_tree_ms, nt
 
 ---
 
-### 8.3 `sampler.py` — Buchberger Batch Accuracy Estimation
+### 8.3 `sampler.rs` — Buchberger Batch Accuracy Estimation
 
-**File:** `zeta/sampler.py`
+**File:** `src/sampler.rs`
 
 **Purpose.** Evaluates Buchberger training accuracy. Predictions and targets are compared modulo 13 (ring characteristic).
 
@@ -1299,11 +1299,11 @@ Measures: forward_ms, ring_mul_us, ring_inv_us, t3_lookup_us, kernel_tree_ms, nt
 
 ---
 
-### 8.4 `tokenizer.py` — Byte, DNA Codon, and Trigram Tokenizers
+### 8.4 `tokenizer.rs` — Byte, DNA Codon, and Trigram Tokenizers
 
-**File:** `zeta/tokenizer.py`
+**File:** `src/tokenizer.rs`
 
-**Purpose.** Provides three native tokenizers. All are pure Python; none is in the forward data path.
+**Purpose.** Provides three native tokenizers. All are pure Rust; none is in the forward data path.
 
 **Functions.**
 
@@ -1327,9 +1327,9 @@ Measures: forward_ms, ring_mul_us, ring_inv_us, t3_lookup_us, kernel_tree_ms, nt
 
 ---
 
-### 8.5 `adelic.py` — Adelic Product and Strong Approximation
+### 8.5 `adelic.rs` — Adelic Product and Strong Approximation
 
-**File:** `zeta/adelic.py`
+**File:** `src/adelic.rs`
 
 **Purpose.** Computes the adelic norm across primes ell != 13 and implements the strong approximation theorem for simultaneous congruences.
 
@@ -1349,9 +1349,9 @@ Measures: forward_ms, ring_mul_us, ring_inv_us, t3_lookup_us, kernel_tree_ms, nt
 
 ---
 
-### 8.6 `__init__.py` — Package Exports and Version
+### 8.6 `__init__.rs` — Package Exports and Version
 
-**File:** `zeta/__init__.py`
+**File:** `src/__init__.rs`
 
 **Purpose.** Package-level exports and metadata.
 
@@ -1389,3 +1389,4 @@ This document was constructed by direct analysis of the 39 source code files com
 **Author:** Dávid Navrátil <david.navratil2016@gmail.com>  
 **License:** CC-BY-NC-4.0  
 **Version:** 7.0.0
+
