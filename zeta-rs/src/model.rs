@@ -1,7 +1,7 @@
 use ndarray::{Array2, Array3};
 use std::cmp::min;
-use crate::constants::{ETA_POW, ORD};
-use crate::ring::Z13Eta;
+use crate::constants::ETA_POW;
+use crate::ring::{Z13Eta, ORD};
 use crate::embed::{ZRingEmbed, TatePE};
 use crate::attention::SpectralAttention;
 use crate::gqm::ErrorCache;
@@ -41,7 +41,15 @@ impl ZetaModel {
             }
         }
         
-        let witt_head = WittVector::from_ring(&head, 4); // max prec = 4
+        let mut witt_head = Array3::from_elem((d, v, 4), Z13Eta::ZERO);
+        for i in 0..d {
+            for j in 0..v {
+                let w = WittVector::from_ring(head[[i, j]], 4);
+                for p in 0..4 {
+                    witt_head[[i, j, p]] = w.data[p];
+                }
+            }
+        }
         
         Self {
             v, d, n, step: 0, prec: 1,
@@ -77,7 +85,14 @@ impl ZetaModel {
         self.pe.forward(&mut x);
         
         for i in 0..self.n {
-            x = t3n(&x, (i + 1) % ORD as usize);
+            let n_pow = (i + 1) % ORD as usize;
+            for r in 0..b {
+                for c in 0..l {
+                    for d_idx in 0..self.d {
+                        x[[r, c, d_idx]] = t3n(&x[[r, c, d_idx]], n_pow);
+                    }
+                }
+            }
             self.layers[i].step = self.step;
             x = self.layers[i].forward(&x, is_training);
         }
@@ -131,7 +146,7 @@ impl ZetaModel {
         let mut delta_norm = 0;
         if hall > 0 {
             if let Some(last_x) = &self.last_x {
-                let mut delta = BuchbergerEngine::nullstellensatz_correction(last_x, &preds, targets, self.step);
+                let mut delta = BuchbergerEngine::nullstellensatz_correction(last_x, &preds, targets, self.step, None);
                 for i in 0..self.d {
                     for j in 0..self.v {
                         delta_norm += delta[[i, j]].norm() as usize;
@@ -145,30 +160,17 @@ impl ZetaModel {
                     }
                 }
                 
-                let delta_witt = WittVector::from_ring(&delta, 4);
-                let mut active = Array3::from_elem((self.d, self.v, self.prec), Z13Eta::ZERO);
                 for i in 0..self.d {
                     for j in 0..self.v {
+                        let dw = WittVector::from_ring(delta[[i, j]], 4);
+                        let mut aw_data = vec![Z13Eta::ZERO; 4];
                         for p in 0..self.prec {
-                            active[[i, j, p]] = self.witt_head[[i, j, p]];
+                            aw_data[p] = self.witt_head[[i, j, p]];
                         }
-                    }
-                }
-                
-                let mut delta_active = Array3::from_elem((self.d, self.v, self.prec), Z13Eta::ZERO);
-                for i in 0..self.d {
-                    for j in 0..self.v {
+                        let aw = WittVector { prec: self.prec, data: aw_data };
+                        let sum_w = WittVector::wadd(&aw, &dw);
                         for p in 0..self.prec {
-                            delta_active[[i, j, p]] = delta_witt[[i, j, p]];
-                        }
-                    }
-                }
-                
-                let new_active = WittVector::wadd(&active, &delta_active);
-                for i in 0..self.d {
-                    for j in 0..self.v {
-                        for p in 0..self.prec {
-                            self.witt_head[[i, j, p]] = new_active[[i, j, p]];
+                            self.witt_head[[i, j, p]] = sum_w.data[p];
                         }
                     }
                 }
@@ -187,30 +189,17 @@ impl ZetaModel {
                         }
                     }
                     
-                    let spec_witt = WittVector::from_ring(&spec_corr, 4);
-                    let mut active2 = Array3::from_elem((self.d, self.v, self.prec), Z13Eta::ZERO);
                     for i in 0..self.d {
                         for j in 0..self.v {
+                            let sw = WittVector::from_ring(spec_corr[[i, j]], 4);
+                            let mut aw_data = vec![Z13Eta::ZERO; 4];
                             for p in 0..self.prec {
-                                active2[[i, j, p]] = self.witt_head[[i, j, p]];
+                                aw_data[p] = self.witt_head[[i, j, p]];
                             }
-                        }
-                    }
-                    
-                    let mut spec_active = Array3::from_elem((self.d, self.v, self.prec), Z13Eta::ZERO);
-                    for i in 0..self.d {
-                        for j in 0..self.v {
+                            let aw = WittVector { prec: self.prec, data: aw_data };
+                            let sum_w = WittVector::wadd(&aw, &sw);
                             for p in 0..self.prec {
-                                spec_active[[i, j, p]] = spec_witt[[i, j, p]];
-                            }
-                        }
-                    }
-                    
-                    let new_active2 = WittVector::wadd(&active2, &spec_active);
-                    for i in 0..self.d {
-                        for j in 0..self.v {
-                            for p in 0..self.prec {
-                                self.witt_head[[i, j, p]] = new_active2[[i, j, p]];
+                                self.witt_head[[i, j, p]] = sum_w.data[p];
                             }
                         }
                     }

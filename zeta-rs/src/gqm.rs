@@ -1,7 +1,7 @@
 use ndarray::Array2;
 use std::cmp::min;
-use crate::constants::{ETA_POW, ORD, T3_POW};
-use crate::ring::Z13Eta;
+use crate::constants::{ETA_POW, T3_POW};
+use crate::ring::{Z13Eta, ORD};
 use crate::ntt::Ntt;
 
 pub struct ErrorCache {
