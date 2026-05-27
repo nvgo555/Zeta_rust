@@ -727,23 +727,67 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 
 ## 19. Usage Examples
 
-### 19.1 Initialization and Axiom Verification
+### 19.1 Rust Port Usage
+The primary high-performance implementation now runs in Rust. Below are examples of how to initialize and use the engine:
 
+#### 19.1.1 Axiom Verification and Benchmarking
+To verify all algebraic axioms and run the internal performance benchmark suite:
+```bash
+# Run axiom verification and default benchmarks
+cargo run --release --bin zeta-rs
+
+# Run detailed scalability benchmarks
+cargo run --release --bin scale_bench
+```
+
+#### 19.1.2 Basic Usage in Rust Code
+Add `zeta-rs` to your project and call the core model:
+```rust
+use ndarray::Array2;
+use zeta_rs::model::ZetaModel;
+use zeta_rs::axioms::AxiomVerifier;
+
+fn main() {
+    // 1. Verify that all runtime algebraic axioms hold
+    assert!(AxiomVerifier::verify_all(), "Algebraic axioms failed!");
+
+    // 2. Initialize the p-adic model
+    let vocab_size = 256;
+    let embed_dim = 54;
+    let n_layers = 11;
+    let mut model = ZetaModel::new(vocab_size, embed_dim, n_layers);
+
+    // 3. Perform a forward pass
+    // Inputs must be ndarray of shape (Batch, SeqLen)
+    let tokens = Array2::from_elem((4, 64), 42usize);
+    let logits = model.forward(&tokens, false);
+
+    println!("Logits shape: {:?}", logits.shape());
+}
+```
+
+### 19.2 Legacy Python Reference Usage
+The original reference implementation can be found in the `legacy/` directory:
+
+#### 19.2.1 Initialization and Axiom Verification
 ```python
-from zeta import ZetaRuntime, AxiomVerifier
+from Zeta.runtime import ZetaRuntime
+from Zeta.axioms import AxiomVerifier
 
 # Initialize the runtime
 rt = ZetaRuntime.init(device='cpu', V=256, D=54, N=11, ctx=256)
 
-# Verify all algebraic axioms before operation
+# Verify all 30 algebraic axioms before operation
 AxiomVerifier.print_report()
 ```
 
-### 19.2 Tokenization and Forward Pass
-
+#### 19.2.2 Tokenization and Forward Pass
 ```python
-from zeta import trigram_tokenise
+from Zeta.tokenizer import trigram_tokenise
+from Zeta.runtime import ZetaRuntime
 import torch
+
+rt = ZetaRuntime.init(device='cpu', V=256, D=54, N=11, ctx=256)
 
 # Compress text by factor of 3
 text = "Algebraic intelligence over cubic p-adic integers."
@@ -754,10 +798,12 @@ tokens = torch.tensor([ids], dtype=torch.long)
 output = rt.model(tokens)
 ```
 
-### 19.3 Autonomous Loop
-
+#### 19.2.3 Autonomous Loop
 ```python
-from zeta import AutonomousLoop
+from Zeta.autonomy import AutonomousLoop
+from Zeta.runtime import ZetaRuntime
+
+rt = ZetaRuntime.init(device='cpu', V=256, D=54, N=11, ctx=256)
 
 loop = AutonomousLoop(rt)
 result = loop.cycle(tokens, target_goal=None)
@@ -766,34 +812,25 @@ print(result)
 # {'self_t': int, 'entropy': int, 'plan': dict, 'scale_actions': dict}
 ```
 
-### 19.4 Benchmarking
-
-```python
-# Standard benchmark suite
-rt.print_benchmark(B=4, L=64)
-```
-
-### 19.5 Riemann Hypothesis Check
-
-```python
-# Verify p-adic spectral condition
-rh_result = rt.rh_check(L=12)
-print(rh_result)
+#### 19.2.4 Running Python Benchmarks
+To run the standard Python benchmark suite, execute from the root directory:
+```bash
+$env:PYTHONIOENCODING="utf-8"; python legacy/run_bench.py
 ```
 
 ---
 
 ## 20. Bibliography
 
-1. **Tribonacci Polynomials and Cubic p-adic Integers.** The arithmetic of finite extensions $\\mathbb{Z}_p[\\eta]/(f(\\eta))$ where $f(x) = x^3 - x^2 - x - 1$, including unit group structure, period computation, and factorisation criteria over $\\mathbb{F}_p$.
+1. **Tribonacci Polynomials and Cubic p-adic Integers.** The arithmetic of finite extensions $\mathbb{Z}_p[\eta]/(f(\eta))$ where $f(x) = x^3 - x^2 - x - 1$, including unit group structure, period computation, and factorisation criteria over $\mathbb{F}_p$.
 
-2. **Sylvester Spectral Decomposition.** Matrix spectral theory via Lagrange interpolation of the minimal polynomial, with application to unimodular matrices in $\\mathrm{SL}(3, \\mathbb{Z})$ and their reduction modulo $p$.
+2. **Sylvester Spectral Decomposition.** Matrix spectral theory via Lagrange interpolation of the minimal polynomial, with application to unimodular matrices in $\mathrm{SL}(3, \mathbb{Z})$ and their reduction modulo $p$.
 
-3. **Bruhat-Tits Trees and Ultrametric Geometry.** The geometry of $\\mathrm{GL}(2, \\mathbb{Q}_p)$ and its associated Bruhat-Tits building, strong triangle inequality, and tree-based kernel methods.
+3. **Bruhat-Tits Trees and Ultrametric Geometry.** The geometry of $\mathrm{GL}(2, \mathbb{Q}_p)$ and its associated Bruhat-Tits building, strong triangle inequality, and tree-based kernel methods.
 
-4. **Hensel Lifting and Witt Vectors.** Precision-adaptive arithmetic in p-adic extensions, construction of Witt vectors $\\mathbb{W}(k)$, ghost component algebra, and Teichmüller representatives.
+4. **Hensel Lifting and Witt Vectors.** Precision-adaptive arithmetic in p-adic extensions, construction of Witt vectors $\mathbb{W}(k)$, ghost component algebra, and Teichmüller representatives.
 
-5. **Number Theoretic Transform over Finite Rings.** Fast convolution algorithms in rings of the form $\\mathbb{Z}_p[\\eta]/(f(\\eta))$, including primitive root selection and inverse transform verification.
+5. **Number Theoretic Transform over Finite Rings.** Fast convolution algorithms in rings of the form $\mathbb{Z}_p[\eta]/(f(\eta))$, including primitive root selection and inverse transform verification.
 
 6. **Buchberger Algorithm and Effective Nullstellensatz.** Gröbner basis computation in multivariate polynomial rings, ideal membership testing, and constructive Hilbert Nullstellensatz for error correction.
 
@@ -803,50 +840,23 @@ print(rh_result)
 
 ---
 
-## Author and License
+## Author, License, and Version
 
 **Author:** Dávid Navrátil `<david.navratil2016@gmail.com>`  
-**License:** CC-BY-NC-4.0  
-**Version:** 7.0.0
-
-## License
-
-Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+**Version:** 7.0.0  
+**License:** Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
 Copyright (c) 2026 Dávid Navrátil
 
 You are free to:
-
-  Share — copy and redistribute the material in any medium or format
-  Adapt — remix, transform, and build upon the material
-
-The licensor cannot revoke these freedoms as long as you follow the
-license terms.
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
 
 Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **NonCommercial** — You may not use the material for commercial purposes.
+- **No additional restrictions** — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
 
-  Attribution   - You must give appropriate credit, provide a link to
-                  the license, and indicate if changes were made. You may
-                  do so in any reasonable manner, but not in any way that
-                  suggests the licensor endorses you or your use.
+**Full license text:** [CC BY-NC 4.0 Legal Code](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
 
-  NonCommercial - You may not use the material for commercial purposes.
-
-  No additional restrictions — You may not apply legal terms or
-                  technological measures that legally restrict others
-                  from doing anything the license permits.
-
-Notices:
-
-  You do not have to comply with the license for elements of the material
-  in the public domain or where your use is permitted by an applicable
-  exception or limitation.
-
-  No warranties are given. The license may not give you all of the
-  permissions necessary for your intended use. For example, other rights
-  such as publicity, privacy, or moral rights may limit how you use the
-  material.
-
-Full license text:  https://creativecommons.org/licenses/by-nc/4.0/legalcode
-
-Commercial licensing inquiries:  david.navratil2016@gmail.com
+Commercial licensing inquiries: david.navratil2016@gmail.com
