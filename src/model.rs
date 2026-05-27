@@ -3,7 +3,7 @@
 //! Connects the embeddings, attention layers, and Buchberger learning engine into 
 //! a cohesive state machine operating entirely within $\mathbb{Z}_{13}[\eta]$.
 
-use ndarray::{Array2, Array3};
+use ndarray::{Array2, Array3, Axis, Zip};
 use std::cmp::min;
 use crate::constants::{ETA_POW};
 use crate::ring::{Z13Eta, ORD};
@@ -112,17 +112,39 @@ impl ZetaModel {
         self.last_x = Some(x.clone());
         
         let mut sc = Array3::from_elem((b, l, self.v), 0u8);
-        for i in 0..b {
-            for j in 0..l {
-                for v_idx in 0..self.v {
-                    let mut sum = 0u16;
-                    for k in 0..self.d {
-                        sum += (x[[i, j, k]] * self.head[[k, v_idx]]).trace() as u16;
+        let head = &self.head;
+        let v = self.v;
+        let d = self.d;
+
+        Zip::from(sc.lanes_mut(Axis(2)))
+            .and(x.lanes(Axis(2)))
+            .par_for_each(|mut sc_row, x_row| {
+                for v_idx in 0..v {
+                    let mut c0 = 0u32;
+                    let mut c1 = 0u32;
+                    let mut c2 = 0u32;
+                    for k in 0..d {
+                        let a = x_row[k].0;
+                        let b = head[[k, v_idx]].0;
+                        
+                        let a0 = a[0] as u32; let a1 = a[1] as u32; let a2 = a[2] as u32;
+                        let b0 = b[0] as u32; let b1 = b[1] as u32; let b2 = b[2] as u32;
+                        
+                        let a1_b2_a2_b1 = a1 * b2 + a2 * b1;
+                        let a2_b2 = a2 * b2;
+                        
+                        c0 += a0 * b0 + a1_b2_a2_b1 + a2_b2;
+                        c1 += a0 * b1 + a1 * b0 + a1_b2_a2_b1 + 2 * a2_b2;
+                        c2 += a0 * b2 + a1 * b1 + a2 * b0 + a1_b2_a2_b1 + 2 * a2_b2;
                     }
-                    sc[[i, j, v_idx]] = (sum % crate::ring::P as u16) as u8;
+                    let c0 = (c0 % 13) as u8;
+                    let c1 = (c1 % 13) as u8;
+                    let c2 = (c2 % 13) as u8;
+                    
+                    let sum = (3 * c0 as u16 + c1 as u16 + 3 * c2 as u16) % 13;
+                    sc_row[v_idx] = sum as u8;
                 }
-            }
-        }
+            });
         
         self.step += 1;
         sc
