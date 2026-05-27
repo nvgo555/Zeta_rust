@@ -14,9 +14,9 @@ Zeta is a self-contained artificial intelligence system whose entire computation
 
 $$\mathbb{Z}{13}[\eta] \;\big/\; (\eta^3 - \eta^2 - \eta - 1)$$
 
-Every tensor, embedding, state transition, kernel evaluation, and learning update is an element of this ring. The system contains no floating-point arithmetic, no gradient descent, no Euclidean metric structures, and no learned real-valued parameters. Instead, dynamics are governed by the unimodular matrix $T\sb 3 \in \mathrm{SL}(3, \mathbb{Z})$, attention by an ultrametric tree kernel derived from the $13$-adic valuation, and learning by the Buchberger-Nullstellensatz algorithm operating on polynomial ideals.
+Every tensor, embedding, state transition, kernel evaluation, and learning update is an element of this ring. The system contains no floating-point arithmetic, no gradient descent, no Euclidean metric structures, and no learned real-valued parameters. Instead, dynamics are governed by the unimodular matrix $T_3 \in \mathrm{SL}(3, \mathbb{Z})$, attention by an ultrametric tree kernel derived from the $13$-adic valuation, and learning by the Buchberger-Nullstellensatz algorithm operating on polynomial ideals.
 
-The ring $\mathbb{Z}{13}[\eta]$ has $2197$ elements. Its unit group has order $2016$, arising from the Chinese Remainder Theorem decomposition $\mathbb{Z}{13}[\eta] \cong \mathbb{F}{13} \times \mathbb{F}{169}$. The multiplicative order of $\eta$ is $168$, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over $\mathbb{F}{13}$ and a two-dimensional subdominant channel over $\mathbb{F}{169}$, with the full symmetry of the Galois group $S\sb 3$ acting on the latter.
+The ring $\mathbb{Z}{13}[\eta]$ has $2197$ elements. Its unit group has order $2016$, arising from the Chinese Remainder Theorem decomposition $\mathbb{Z}{13}[\eta] \cong \mathbb{F}{13} \times \mathbb{F}{169}$. The multiplicative order of $\eta$ is $168$, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over $\mathbb{F}{13}$ and a two-dimensional subdominant channel over $\mathbb{F}{169}$, with the full symmetry of the Galois group $S_3$ acting on the latter.
 
 This document specifies the mathematical foundations, architectural components, algorithmic procedures, and operational semantics of the Zeta system.
 
@@ -28,9 +28,9 @@ This document specifies the mathematical foundations, architectural components, 
 
 1. [Mathematical Preliminaries](#1-mathematical-preliminaries)
 2. [The Base Ring $\mathbb{Z}{13}[\eta]$](#2-the-base-ring)
-3. [Spectral Theory of $T\sb 3$](#3-spectral-theory-of-t3)
+3. [Spectral Theory of $T_3$](#3-spectral-theory-of-t3)
 4. [The Ultrametric Kernel](#4-the-ultrametric-kernel)
-5. [Galois Symmetry and the $S\sb 3$ Action](#5-galois-symmetry)
+5. [Galois Symmetry and the $S_3$ Action](#5-galois-symmetry)
 6. [Chinese Remainder Theorem Decomposition](#6-chinese-remainder-theorem)
 7. [Architecture](#7-architecture)
 8. [Deterministic Embeddings and Positional Encoding](#8-deterministic-embeddings)
@@ -75,9 +75,9 @@ is a finite ring with $13^3 = 2197$ elements. It is not a field; the factorisati
 
 Every element $a \in \mathbb{Z}{13}[\eta]$ admits a unique representation
 
-$$a = a\sb 0 + a\sb 1 \eta + a\sb 2 \eta^2, \qquad a\sb i \in \mathbb{F}{13}$$
+$$a = a_0 + a_1 \eta + a_2 \eta^2, \qquad a_i \in \mathbb{F}{13}$$
 
-under the reduction relation $\eta^3 = \eta^2 + \eta + 1$. In computational form, $a$ is stored as the integer triple $(a\sb 0, a\sb 1, a\sb 2)$.
+under the reduction relation $\eta^3 = \eta^2 + \eta + 1$. In computational form, $a$ is stored as the integer triple $(a_0, a_1, a_2)$.
 
 ### 1.4 The Unit Group
 
@@ -89,7 +89,7 @@ The element $\eta$ itself is a unit with
 
 $$\mathrm{ord}(\eta) = 168$$
 
-This period governs all cyclic structures in the system: embeddings, positional encodings, and $T\sb 3$ orbit evolution.
+This period governs all cyclic structures in the system: embeddings, positional encodings, and $T_3$ orbit evolution.
 
 ---
 
@@ -97,16 +97,16 @@ This period governs all cyclic structures in the system: embeddings, positional 
 
 ### 2.1 Ring Arithmetic
 
-**Addition.** For $a = (a\sb 0, a\sb 1, a\sb 2)$ and $b = (b\sb 0, b\sb 1, b\sb 2)$:
+**Addition.** For $a = (a_0, a_1, a_2)$ and $b = (b_0, b_1, b_2)$:
 
-$$a + b = \big((a\sb 0 + b\sb 0) \bmod 13,\; (a\sb 1 + b\sb 1) \bmod 13,\; (a\sb 2 + b\sb 2) \bmod 13\big)$$
+$$a + b = \big((a_0 + b_0) \bmod 13,\; (a_1 + b_1) \bmod 13,\; (a_2 + b_2) \bmod 13\big)$$
 
-**Multiplication.** Compute the polynomial product $(a\sb 0 + a\sb 1 \eta + a\sb 2 \eta^2)(b\sb 0 + b\sb 1 \eta + b\sb 2 \eta^2)$ and reduce using $\eta^3 = \eta^2 + \eta + 1$ and $\eta^4 = 2\eta^2 + 2\eta + 1$:
+**Multiplication.** Compute the polynomial product $(a_0 + a_1 \eta + a_2 \eta^2)(b_0 + b_1 \eta + b_2 \eta^2)$ and reduce using $\eta^3 = \eta^2 + \eta + 1$ and $\eta^4 = 2\eta^2 + 2\eta + 1$:
 
 $$\begin{aligned}
-c\sb 0 &= a\sb 0 b\sb 0 + a\sb 1 b\sb 2 + a\sb 2 b\sb 1 + a\sb 2 b\sb 2 \\
-c\sb 1 &= a\sb 0 b\sb 1 + a\sb 1 b\sb 0 + a\sb 1 b\sb 2 + a\sb 2 b\sb 1 + 2a\sb 2 b\sb 2 \\
-c\sb 2 &= a\sb 0 b\sb 2 + a\sb 1 b\sb 1 + a\sb 2 b\sb 0 + a\sb 1 b\sb 2 + a\sb 2 b\sb 1 + 2a\sb 2 b\sb 2
+c_0 &= a_0 b_0 + a_1 b_2 + a_2 b_1 + a_2 b_2 \\
+c_1 &= a_0 b_1 + a_1 b_0 + a_1 b_2 + a_2 b_1 + 2a_2 b_2 \\
+c_2 &= a_0 b_2 + a_1 b_1 + a_2 b_0 + a_1 b_2 + a_2 b_1 + 2a_2 b_2
 \end{aligned}$$
 
 All coefficients taken modulo $13$.
@@ -125,53 +125,53 @@ The sequence $\eta^n$ for $n = 0, 1, 2, \dots$ is periodic with period $168$. Th
 
 ---
 
-## 3. Spectral Theory of $T\sb 3$
+## 3. Spectral Theory of $T_3$
 
 ### 3.1 Definition and Basic Properties
 
 The evolution operator is the integer matrix
 
-$$T\sb 3 = \begin{pmatrix} 0 & 0 & 1 \\ 1 & 0 & 1 \\ 0 & 1 & 1 \end{pmatrix} \in \mathrm{SL}(3, \mathbb{Z})$$
+$$T_3 = \begin{pmatrix} 0 & 0 & 1 \\ 1 & 0 & 1 \\ 0 & 1 & 1 \end{pmatrix} \in \mathrm{SL}(3, \mathbb{Z})$$
 
-**Proposition 3.1.** $\det(T\sb 3) = 1$.
+**Proposition 3.1.** $\det(T_3) = 1$.
 
 *Proof.* Direct computation: $0(0 - 1) - 0(1 - 0) + 1(1 - 0) = 1$. $\square$
 
-**Proposition 3.2.** The characteristic polynomial of $T\sb 3$ is $\chi{T\sb 3}(\lambda) = \lambda^3 - \lambda^2 - \lambda - 1 = f(\lambda)$.
+**Proposition 3.2.** The characteristic polynomial of $T_3$ is $\chi{T_3}(\lambda) = \lambda^3 - \lambda^2 - \lambda - 1 = f(\lambda)$.
 
-*Proof.* Direct expansion of $\det(T\sb 3 - \lambda I)$. $\square$
+*Proof.* Direct expansion of $\det(T_3 - \lambda I)$. $\square$
 
-**Proposition 3.3.** $T\sb 3^{168} = I$ in $\mathrm{GL}(3, \mathbb{F}{13})$.
+**Proposition 3.3.** $T_3^{168} = I$ in $\mathrm{GL}(3, \mathbb{F}{13})$.
 
-*Proof.* The eigenvalues of $T\sb 3$ modulo $13$ are the roots of $f(x) = (x-7)(x^2+6x+2)$. The linear factor gives eigenvalue $7$ with order dividing $12$; the quadratic factor gives eigenvalues in $\mathbb{F}{169}^\times$ with order dividing $168$. The least common multiple is $168$. Direct computation confirms that no smaller positive exponent yields the identity. $\square$
+*Proof.* The eigenvalues of $T_3$ modulo $13$ are the roots of $f(x) = (x-7)(x^2+6x+2)$. The linear factor gives eigenvalue $7$ with order dividing $12$; the quadratic factor gives eigenvalues in $\mathbb{F}{169}^\times$ with order dividing $168$. The least common multiple is $168$. Direct computation confirms that no smaller positive exponent yields the identity. $\square$
 
 ### 3.2 Eigenvalue Structure
 
-The eigenvalues of $T\sb 3$ modulo $13$ are the roots of $f(x) = 0$:
+The eigenvalues of $T_3$ modulo $13$ are the roots of $f(x) = 0$:
 
-- $\lambda\sb 1 = 7 \in \mathbb{F}{13}$ (dominant, in the base field)
-- $\lambda\sb 2, \lambda\sb 3 \in \mathbb{F}{169} \setminus \mathbb{F}{13}$ (subdominant, conjugate pair in the quadratic extension)
+- $\lambda_1 = 7 \in \mathbb{F}{13}$ (dominant, in the base field)
+- $\lambda_2, \lambda_3 \in \mathbb{F}{169} \setminus \mathbb{F}{13}$ (subdominant, conjugate pair in the quadratic extension)
 
-The dominant right eigenvector is $v\sb 1 = (1, 3, 7)^T$, verified by $T\sb 3 v\sb 1 = 7 v\sb 1$. The left eigenvector is $w\sb 1 = (1, 7, 10)$, satisfying $w\sb 1^T T\sb 3 = 7 w\sb 1^T$. The triple $(1, 7, 10)$ also equals $(\varphi\sb 1(1), \varphi\sb 1(\eta), \varphi\sb 1(\eta^2))$, the evaluation of the basis under the dominant CRT projection.
+The dominant right eigenvector is $v_1 = (1, 3, 7)^T$, verified by $T_3 v_1 = 7 v_1$. The left eigenvector is $w_1 = (1, 7, 10)$, satisfying $w_1^T T_3 = 7 w_1^T$. The triple $(1, 7, 10)$ also equals $(\varphi_1(1), \varphi_1(\eta), \varphi_1(\eta^2))$, the evaluation of the basis under the dominant CRT projection.
 
 ### 3.3 Sylvester Spectral Decomposition
 
-**Theorem 3.4 (Sylvester).** There exist unique matrices $P\sb 1, P{23} \in \mathrm{Mat}{3 \times 3}(\mathbb{F}{13})$ such that:
+**Theorem 3.4 (Sylvester).** There exist unique matrices $P_1, P{23} \in \mathrm{Mat}{3 \times 3}(\mathbb{F}{13})$ such that:
 
-1. $P\sb 1 + P{23} = I$
-2. $P\sb 1^2 = P\sb 1$, $P{23}^2 = P{23}$
-3. $P\sb 1 P{23} = P{23} P\sb 1 = 0$
-4. $T\sb 3 P\sb 1 = 7 P\sb 1$, $T\sb 3 P{23} = P{23} T\sb 3$
+1. $P_1 + P{23} = I$
+2. $P_1^2 = P_1$, $P{23}^2 = P{23}$
+3. $P_1 P{23} = P{23} P_1 = 0$
+4. $T_3 P_1 = 7 P_1$, $T_3 P{23} = P{23} T_3$
 
 Moreover, for all $n \geq 0$:
 
-$$T\sb 3^n = 7^n P\sb 1 + P{23} T\sb 3^n$$
+$$T_3^n = 7^n P_1 + P{23} T_3^n$$
 
 *Proof.* Standard spectral decomposition for matrices with distinct eigenvalues. The projectors are constructed from the Lagrange interpolation polynomials of the minimal polynomial. $\square$
 
-**Corollary 3.5.** The dominant channel evolves by scalar multiplication: $P\sb 1 T\sb 3^n x = 7^n P\sb 1 x$.
+**Corollary 3.5.** The dominant channel evolves by scalar multiplication: $P_1 T_3^n x = 7^n P_1 x$.
 
-**Corollary 3.6.** Time reversibility: $T\sb 3^{-n} = T\sb 3^{168-n}$ for all $n \in \mathbb{Z}$.
+**Corollary 3.6.** Time reversibility: $T_3^{-n} = T_3^{168-n}$ for all $n \in \mathbb{Z}$.
 
 ---
 
@@ -209,21 +209,21 @@ The kernel induces a hierarchical tree structure on the token positions. Positio
 
 ---
 
-## 5. Galois Symmetry and the $S\sb 3$ Action
+## 5. Galois Symmetry and the $S_3$ Action
 
 ### 5.1 The Galois Group
 
-The Galois group of $f(x) = x^3 - x^2 - x - 1$ over $\mathbb{Q}$ is $S\sb 3$, the symmetric group on three letters, of order $6$. Over $\mathbb{F}{13}$, the splitting field is $\mathbb{F}{13^6}$, and the Galois group is generated by the Frobenius automorphism $\mathrm{Frob}(x) = x^{13}$ of order $3$ on $\mathbb{F}{13^3}$.
+The Galois group of $f(x) = x^3 - x^2 - x - 1$ over $\mathbb{Q}$ is $S_3$, the symmetric group on three letters, of order $6$. Over $\mathbb{F}{13}$, the splitting field is $\mathbb{F}{13^6}$, and the Galois group is generated by the Frobenius automorphism $\mathrm{Frob}(x) = x^{13}$ of order $3$ on $\mathbb{F}{13^3}$.
 
 ### 5.2 Permutation Representation
 
-The $S\sb 3$ action on $\mathbb{Z}{13}[\eta]$ is represented by $3 \times 3$ permutation matrices $\{S\sb 3^{(g)}\}{g=1}^6$ acting on the coefficient vector $(a\sb 0, a\sb 1, a\sb 2)^T$. The group multiplication table is precomputed as a $(6, 6)$ integer matrix `_S3_MUL` for $O(1)$ composition.
+The $S_3$ action on $\mathbb{Z}{13}[\eta]$ is represented by $3 \times 3$ permutation matrices $\{S_3^{(g)}\}{g=1}^6$ acting on the coefficient vector $(a_0, a_1, a_2)^T$. The group multiplication table is precomputed as a $(6, 6)$ integer matrix `_S3_MUL` for $O(1)$ composition.
 
 ### 5.3 Conjugation Operator
 
 The conjugation operator $J$ is defined via CRT:
 
-$$J = \mathrm{CRT}^{-1}\big(\varphi\sb 1,\; \mathrm{Frob}(\varphi\sb 2)\big)$$
+$$J = \mathrm{CRT}^{-1}\big(\varphi_1,\; \mathrm{Frob}(\varphi_2)\big)$$
 
 **Proposition 5.1.** $J^2 = \mathrm{id}$.
 
@@ -233,7 +233,7 @@ $$J = \mathrm{CRT}^{-1}\big(\varphi\sb 1,\; \mathrm{Frob}(\varphi\sb 2)\big)$$
 
 For any state $x$, the six Galois-conjugate orbits are:
 
-$$x\sb g^{(n)} = S\sb 3^{(g)} \cdot T\sb 3^n \cdot x, \qquad g = 1, \dots, 6$$
+$$x_g^{(n)} = S_3^{(g)} \cdot T_3^n \cdot x, \qquad g = 1, \dots, 6$$
 
 The `S3ParallelAttention` module evaluates all six orbits simultaneously via tensor broadcasting, then reduces them through the Casimir operator to produce a Galois-invariant output.
 
@@ -253,15 +253,15 @@ induced by the factorisation $f(x) = (x-7)(x^2+6x+2)$ over $\mathbb{F}{13}$.
 
 ### 6.2 Component Maps
 
-**Dominant projection** $\varphi\sb 1: \mathbb{Z}{13}[\eta] \to \mathbb{F}{13}$:
+**Dominant projection** $\varphi_1: \mathbb{Z}{13}[\eta] \to \mathbb{F}{13}$:
 
-$$\varphi\sb 1(a\sb 0 + a\sb 1 \eta + a\sb 2 \eta^2) = a\sb 0 + 7a\sb 1 + 10a\sb 2$$
+$$\varphi_1(a_0 + a_1 \eta + a_2 \eta^2) = a_0 + 7a_1 + 10a_2$$
 
-since $\varphi\sb 1(\eta) = 7$ and $\varphi\sb 1(\eta^2) = 7^2 = 49 = 10$ in $\mathbb{F}{13}$.
+since $\varphi_1(\eta) = 7$ and $\varphi_1(\eta^2) = 7^2 = 49 = 10$ in $\mathbb{F}{13}$.
 
-**Subdominant projection** $\varphi\sb 2: \mathbb{Z}{13}[\eta] \to \mathbb{F}{169}$:
+**Subdominant projection** $\varphi_2: \mathbb{Z}{13}[\eta] \to \mathbb{F}{169}$:
 
-$$\varphi\sb 2(a\sb 0 + a\sb 1 \eta + a\sb 2 \eta^2) = (a\sb 0 + 11a\sb 2) + (a\sb 1 + 7a\sb 2)\xi$$
+$$\varphi_2(a_0 + a_1 \eta + a_2 \eta^2) = (a_0 + 11a_2) + (a_1 + 7a_2)\xi$$
 
 where $\mathbb{F}{169} = \mathbb{F}{13}[\xi]/(\xi^2 + 6\xi + 2)$ and $\xi^2 = 7\xi + 11$.
 
@@ -269,7 +269,7 @@ where $\mathbb{F}{169} = \mathbb{F}{13}[\xi]/(\xi^2 + 6\xi + 2)$ and $\xi^2 = 7\
 
 Given $(s, q) \in \mathbb{F}{13} \times \mathbb{F}{169}$, the unique preimage $a \in \mathbb{Z}{13}[\eta]$ is computed via the standard CRT formula using the precomputed Bézout coefficients for the coprime ideals $(\eta - 7)$ and $(\eta^2 + 6\eta + 2)$. The reconstruction formula is:
 
-$$a = s \cdot (1, 3, 7) + q\sb 0 \cdot (0, 10, 6) + q\sb 1 \cdot (6, 6, 3) \pmod{13}$$
+$$a = s \cdot (1, 3, 7) + q_0 \cdot (0, 10, 6) + q_1 \cdot (6, 6, 3) \pmod{13}$$
 
 ---
 
@@ -304,9 +304,9 @@ All operations are performed in $\mathbb{Z}{13}[\eta]$ using `torch.long` tensor
 
 1. **Algebraic Closure:** Every intermediate value is a ring element.
 2. **Determinism:** Embeddings and transitions are computed, not learned.
-3. **Reversibility:** All evolution is time-reversible via $T\sb 3^{-n} = T\sb 3^{168-n}$.
+3. **Reversibility:** All evolution is time-reversible via $T_3^{-n} = T_3^{168-n}$.
 4. **Spectral Separation:** Dominant and subdominant channels are processed independently.
-5. **Galois Covariance:** The system respects the $S\sb 3$ symmetry.
+5. **Galois Covariance:** The system respects the $S_3$ symmetry.
 
 ---
 
@@ -332,7 +332,7 @@ $$\mathrm{PE}[n, 2k] = \eta^{nk \bmod 168}, \qquad \mathrm{PE}[n, 2k+1] = \eta^{
 
 **Properties:**
 - Valid for any sequence length $L$ without recomputation.
-- Multiplicative structure: $\mathrm{PE}[n\sb 1 + n\sb 2, :] = \mathrm{PE}[n\sb 1, :] \cdot \mathrm{PE}[n\sb 2, :]$.
+- Multiplicative structure: $\mathrm{PE}[n_1 + n_2, :] = \mathrm{PE}[n_1, :] \cdot \mathrm{PE}[n_2, :]$.
 - No trigonometric functions or real numbers.
 
 ---
@@ -343,15 +343,15 @@ $$\mathrm{PE}[n, 2k] = \eta^{nk \bmod 168}, \qquad \mathrm{PE}[n, 2k+1] = \eta^{
 
 Given input $X \in \mathbb{Z}{13}[\eta]^{B \times L \times D}$, the attention layer first projects into spectral channels:
 
-$$X\sb 1 = P\sb 1 \cdot X, \qquad X{23} = P{23} \cdot X$$
+$$X_1 = P_1 \cdot X, \qquad X{23} = P{23} \cdot X$$
 
-where $P\sb 1$ and $P{23}$ are applied as matrix multiplications on the trailing $3$-dimensional coefficient space.
+where $P_1$ and $P{23}$ are applied as matrix multiplications on the trailing $3$-dimensional coefficient space.
 
 ### 9.2 Tree Kernel Mixing
 
 For each channel, the ultrametric kernel performs global information mixing:
 
-$$X\sb 1^{(k)} = \mathrm{PAdicKernel}(X\sb 1), \qquad X{23}^{(k)} = \mathrm{PAdicKernel}(X{23})$$
+$$X_1^{(k)} = \mathrm{PAdicKernel}(X_1), \qquad X{23}^{(k)} = \mathrm{PAdicKernel}(X{23})$$
 
 For $L \leq 169$, the fast fused path is used; for $L > 169$, the standard tree path. The kernel never materializes an $L \times L$ matrix.
 
@@ -359,7 +359,7 @@ For $L \leq 169$, the fast fused path is used; for $L > 169$, the standard tree 
 
 Query, key, and value transformations are ring-linear maps applied pointwise along the dimension axis:
 
-$$Q\sb c = \text{ring\\_lin}(X\sb c^{(k)}, W\sb c^Q), \quad K\sb c = \text{ring\\_lin}(X\sb c^{(k)}, W\sb c^K), \quad V\sb c = \text{ring\\_lin}(X\sb c^{(k)}, W\sb c^V)$$
+$$Q_c = \text{ring\_lin}(X_c^{(k)}, W_c^Q), \quad K_c = \text{ring\_lin}(X_c^{(k)}, W_c^K), \quad V_c = \text{ring\_lin}(X_c^{(k)}, W_c^V)$$
 
 where $c \in \{\mathrm{dom}, \mathrm{sub}\}$. The weight matrices $W$ are deterministic $\eta$-power seeds generated by `w_seed`.
 
@@ -367,9 +367,9 @@ where $c \in \{\mathrm{dom}, \mathrm{sub}\}$. The weight matrices $W$ are determ
 
 Attention scores are computed via the algebraic trace inner product and normalized using the algebraic norm:
 
-$$S\sb c[b, l, d] = \mathrm{Tr}(Q\sb c[b, l, d] \cdot K\sb c[b, l, d]) \bmod 13$$
+$$S_c[b, l, d] = \mathrm{Tr}(Q_c[b, l, d] \cdot K_c[b, l, d]) \bmod 13$$
 
-$$O\sb c = V\sb c \cdot S\sb c \bmod 13$$
+$$O_c = V_c \cdot S_c \bmod 13$$
 
 This replaces the softmax operation with purely algebraic weighting. No $L \times L$ attention matrix is ever formed.
 
@@ -377,7 +377,7 @@ This replaces the softmax operation with purely algebraic weighting. No $L \time
 
 The channel outputs are concatenated and projected back:
 
-$$\mathrm{Out} = \text{ring\\_lin}([O{\mathrm{dom}}; O{\mathrm{sub}}], W\sb O)$$
+$$\mathrm{Out} = \text{ring\_lin}([O{\mathrm{dom}}; O{\mathrm{sub}}], W_O)$$
 
 followed by residual connection, discrete Laplacian smoothing, and HilbertEta layer normalization.
 
@@ -387,15 +387,15 @@ followed by residual connection, discrete Laplacian smoothing, and HilbertEta la
 
 ### 10.1 Witt Vector Construction
 
-The output head stores weights as Witt vectors over $\mathbb{Z}{13}[\eta]$. A Witt vector of length $m$ is a sequence $(w\sb 0, w\sb 1, \dots, w{m-1})$ where each $w\sb k \in \mathbb{Z}{13}[\eta]$. The ghost components are given by:
+The output head stores weights as Witt vectors over $\mathbb{Z}{13}[\eta]$. A Witt vector of length $m$ is a sequence $(w_0, w_1, \dots, w{m-1})$ where each $w_k \in \mathbb{Z}{13}[\eta]$. The ghost components are given by:
 
-$$w^{(n)} = \sum{k=0}^{n} 13^k w\sb k^{13^{n-k}}$$
+$$w^{(n)} = \sum{k=0}^{n} 13^k w_k^{13^{n-k}}$$
 
 ### 10.2 Head Synchronization
 
 The effective head weights are synthesized from all active precision layers:
 
-$$\mathrm{head} = \sum{k=0}^{\mathrm{prec}-1} (k+1) \cdot \text{to\\_ring}\big(\text{witt\\_head}[\dots, k, :]\big) \pmod{13}$$
+$$\mathrm{head} = \sum{k=0}^{\mathrm{prec}-1} (k+1) \cdot \text{to\_ring}\big(\text{witt\_head}[\dots, k, :]\big) \pmod{13}$$
 
 ### 10.3 Hensel Lifting
 
@@ -407,15 +407,15 @@ When the entropy monitor triggers a precision catastrophe, the system increments
 
 ### 11.1 Hierarchical Coarse-Graining
 
-The Multi-scale Entanglement Renormalization Ansatz is implemented via alternating ring addition and $T\sb 3$-evolution:
+The Multi-scale Entanglement Renormalization Ansatz is implemented via alternating ring addition and $T_3$-evolution:
 
 $$\text{level } 0: \quad x^{(0)}[i] = x[i], \quad i = 0, \dots, L-1$$
 
-$$\text{level } k: \quad x^{(k)}[i] = T\sb 3^{2^k} \cdot \big(x^{(k-1)}[2i] + x^{(k-1)}[2i+1]\big)$$
+$$\text{level } k: \quad x^{(k)}[i] = T_3^{2^k} \cdot \big(x^{(k-1)}[2i] + x^{(k-1)}[2i+1]\big)$$
 
 ### 11.2 Dynamic Depth
 
-The number of levels is $\lfloor \log\sb 2 L \rfloor$, capped at $10$. For odd-length sequences, the final element is handled via $\min(\text{even}, \text{odd})$ truncation without padding tokens.
+The number of levels is $\lfloor \log_2 L \rfloor$, capped at $10$. For odd-length sequences, the final element is handled via $\min(\text{even}, \text{odd})$ truncation without padding tokens.
 
 ---
 
@@ -425,19 +425,19 @@ The number of levels is $\lfloor \log\sb 2 L \rfloor$, capped at $10$. For odd-l
 
 Quantum states are formal sums over the token basis with coefficients in $\mathbb{Z}{13}[\eta]$:
 
-$$|\psi\rangle = \sum{k=0}^{K-1} c\sb k |k\rangle, \qquad c\sb k \in \mathbb{Z}{13}[\eta]$$
+$$|\psi\rangle = \sum{k=0}^{K-1} c_k |k\rangle, \qquad c_k \in \mathbb{Z}{13}[\eta]$$
 
 ### 12.2 Born Rule
 
 The probability weight of basis state $|k\rangle$ is:
 
-$$p\sb k = \mathrm{N}(c\sb k) \cdot 2^k \bmod 13$$
+$$p_k = \mathrm{N}(c_k) \cdot 2^k \bmod 13$$
 
 ### 12.3 Density Matrices
 
 The density matrix of a pure state is:
 
-$$\rho = |\psi\rangle\langle\psi| = \sum{i,j} c\sb i \overline{c\sb j} |i\rangle\langle j|$$
+$$\rho = |\psi\rangle\langle\psi| = \sum{i,j} c_i \overline{c_j} |i\rangle\langle j|$$
 
 where the conjugation is the $J$ operator from Section 5.3. For mixed states, $\rho$ is a sum of such terms.
 
@@ -445,9 +445,9 @@ where the conjugation is the $J$ operator from Section 5.3. For mixed states, $\
 
 The system maintains a quantum cache that accumulates and evolves density matrices:
 
-$$\rho{\text{cache}}(t) = \sum{s=0}^{t} T\sb 3^{t-s} \cdot \rho\sb s \cdot T\sb 3^{-(t-s)}$$
+$$\rho{\text{cache}}(t) = \sum{s=0}^{t} T_3^{t-s} \cdot \rho_s \cdot T_3^{-(t-s)}$$
 
-This provides a form of quantum memory that is automatically time-averaged over the $T\sb 3$ orbit.
+This provides a form of quantum memory that is automatically time-averaged over the $T_3$ orbit.
 
 ---
 
@@ -455,9 +455,9 @@ This provides a form of quantum memory that is automatically time-averaged over 
 
 ### 13.1 Error Ideal
 
-For a token position $(b, l)$ with target $v\sb t$ and prediction $v\sb p$, the error is embedded into $\mathbb{Z}{13}[\eta]$ as:
+For a token position $(b, l)$ with target $v_t$ and prediction $v_p$, the error is embedded into $\mathbb{Z}{13}[\eta]$ as:
 
-$$e{b,l} = (v\sb t - v\sb p) \bmod 13$$
+$$e{b,l} = (v_t - v_p) \bmod 13$$
 
 extended to the full ring as $(e{b,l}, 0, 0)$.
 
@@ -475,7 +475,7 @@ $$\text{contrib}{b,l} = g{b,l} \cdot e{b,l}$$
 
 The head is updated by boosting the target and suppressing the prediction:
 
-$$\text{boost} = \text{contrib} \cdot e{v\sb t}, \qquad \text{suppress} = \text{contrib} \cdot e{v\sb p}$$
+$$\text{boost} = \text{contrib} \cdot e{v_t}, \qquad \text{suppress} = \text{contrib} \cdot e{v_p}$$
 
 $$\Delta{\text{head}} = \text{boost} - \text{suppress}$$
 
@@ -503,10 +503,10 @@ The correction is absorbed into the `ErrorCache` as a density matrix update. The
 
 | Component | Function |
 |-----------|----------|
-| `ZetaSelf` | Persistent self-state $\Psi{\text{self}}(t) = T\sb 3^t \Psi{\text{self}}(0) + \sum\sb s T\sb 3^{t-s} \cdot \text{sensory}\sb s$. Reflects on goal deficit via $P\sb 1$ projection. |
-| `ZetaGoalPlanner` | Searches the $T\sb 3$ orbit ($168$ steps) for the optimal approach vector to the target state. Selects processing channel: direct, $P\sb 1$, $P{23}$, or Witt lift. |
+| `ZetaSelf` | Persistent self-state $\Psi{\text{self}}(t) = T_3^t \Psi{\text{self}}(0) + \sum_s T_3^{t-s} \cdot \text{sensory}_s$. Reflects on goal deficit via $P_1$ projection. |
+| `ZetaGoalPlanner` | Searches the $T_3$ orbit ($168$ steps) for the optimal approach vector to the target state. Selects processing channel: direct, $P_1$, $P{23}$, or Witt lift. |
 | `EntropyMonitor` | Computes algebraic entropy from the state distribution. Triggers Hensel precision catastrophe when entropy exceeds threshold ($S{\max} = 10$). |
-| `ZetaScaler` | Maintains a $24$-step performance history. Autonomously activates multi-layer Witt, $S\sb 3$ parallel mode, or dynamic MERA based on error trends. |
+| `ZetaScaler` | Maintains a $24$-step performance history. Autonomously activates multi-layer Witt, $S_3$ parallel mode, or dynamic MERA based on error trends. |
 | `AutonomousLoop` | Orchestrates the closed cycle: sense $\to$ evolve $\to$ plan $\to$ act $\to$ learn. |
 
 ### 14.2 Scaling Decisions
@@ -514,7 +514,7 @@ The correction is absorbed into the `ErrorCache` as a density matrix update. The
 The `ZetaScaler` makes autonomous decisions based on a $24$-step rolling window:
 
 - **Multi-layer Witt:** Activated when average entropy exceeds $6$.
-- **$S\sb 3$ parallel orbit:** Cycled when error rate exceeds $50\%$ ($\text{avg\\_err} > 12$ out of $24$ steps).
+- **$S_3$ parallel orbit:** Cycled when error rate exceeds $50\%$ ($\text{avg\_err} > 12$ out of $24$ steps).
 - **Dynamic MERA:** Activated when sequence length exceeds $64$.
 - **Hensel lift recommendation:** Issued when entropy reaches $10$.
 
@@ -564,7 +564,7 @@ UPDATE: ErrorCache.absorb() + SpectralMemory.update()
 - Compression: $3\times$
 - Method: Overlapping trigram hash with CRT-style coefficients:
 
-$$h(b\sb 1, b\sb 2, b\sb 3) = (b\sb 1 + 7 \cdot b\sb 2 + 10 \cdot b\sb 3) \bmod 256$$
+$$h(b_1, b_2, b_3) = (b_1 + 7 \cdot b_2 + 10 \cdot b_3) \bmod 256$$
 
 - Use: General text, long sequences
 
@@ -579,13 +579,13 @@ The runtime enforces $30$ algebraic axioms organized into $10$ categories. All a
 | Category | Axioms | Assertions |
 |----------|--------|------------|
 | Ring | A001–A009 | Associativity and commutativity of addition and multiplication; distributivity; existence of additive identity $(0,0,0)$ and multiplicative identity $(1,0,0)$; existence of multiplicative inverses for units; characteristic $13$; reduction identity $\eta^3 = \eta^2 + \eta + 1$ |
-| CRT | A010–A011 | Isomorphism $\mathbb{Z}{13}[\eta] \cong \mathbb{F}{13} \times \mathbb{F}{169}$; roundtrip fidelity $\mathrm{CRT}^{-1}(\varphi\sb 1(a), \varphi\sb 2(a)) = a$; $\varphi\sb 1(1) = 1$ |
-| $T\sb 3$ | A012–A014 | $\det(T\sb 3) = 1$; $T\sb 3^{168} = I$; $T\sb 3 \cdot P\sb 1 = 7 P\sb 1$ |
-| Sylvester | A015–A019 | Idempotence $P\sb 1^2 = P\sb 1$, $P{23}^2 = P{23}$; orthogonality $P\sb 1 P{23} = 0$; completeness $P\sb 1 + P{23} = I$; spectral decomposition identity $T\sb 3^n = 7^n P\sb 1 + P{23} T\sb 3^n$ |
-| $S\sb 3$ | A020–A021 | Group closure: $\forall g, h \in S\sb 3: g \cdot h \in S\sb 3$; involution $J^2 = \mathrm{id}$ |
+| CRT | A010–A011 | Isomorphism $\mathbb{Z}{13}[\eta] \cong \mathbb{F}{13} \times \mathbb{F}{169}$; roundtrip fidelity $\mathrm{CRT}^{-1}(\varphi_1(a), \varphi_2(a)) = a$; $\varphi_1(1) = 1$ |
+| $T_3$ | A012–A014 | $\det(T_3) = 1$; $T_3^{168} = I$; $T_3 \cdot P_1 = 7 P_1$ |
+| Sylvester | A015–A019 | Idempotence $P_1^2 = P_1$, $P{23}^2 = P{23}$; orthogonality $P_1 P{23} = 0$; completeness $P_1 + P{23} = I$; spectral decomposition identity $T_3^n = 7^n P_1 + P{23} T_3^n$ |
+| $S_3$ | A020–A021 | Group closure: $\forall g, h \in S_3: g \cdot h \in S_3$; involution $J^2 = \mathrm{id}$ |
 | Kernel | A022–A023 | Diagonal identity $G(i, i) = 1$; strong triangle inequality for all triples $(i, j, k)$ |
 | NTT | A024–A025 | Roundtrip: $\mathrm{INTT}(\mathrm{NTT}(x)) = x$; convolution theorem: $\mathrm{NTT}(a * b) = \mathrm{NTT}(a) \cdot \mathrm{NTT}(b)$ |
-| Witt | A026–A027 | Witt addition and multiplication are consistent with ring arithmetic: $\text{to\\_ring}(\mathrm{wadd}(w, v)) = a + b$, $\text{to\\_ring}(\mathrm{wmul}(w, v)) = a \cdot b$ |
+| Witt | A026–A027 | Witt addition and multiplication are consistent with ring arithmetic: $\text{to\_ring}(\mathrm{wadd}(w, v)) = a + b$, $\text{to\_ring}(\mathrm{wmul}(w, v)) = a \cdot b$ |
 | Dirac | A028–A029 | Antisymmetry $D[i,j] = -D[j,i]$; p-adic Riemann Hypothesis spectral condition |
 | Spectral | A030 | Winding number of the spectral flow equals $14$ |
 
@@ -600,7 +600,7 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | Ring addition | $O(1)$ | — | $<0.1\text{ ns}$ (Compiler Optimized) | — |
 | Ring multiplication | $O(1)$ | $\sim 276.1\,\mu\text{s}$ | $<0.1\text{ ns}$ (Compiler Optimized) | **$>2,700,000\times$** |
 | Ring inverse | $O(1)$ | $\sim 73.7\,\mu\text{s}$ | $\sim 1.5\text{ ns}$ | **$\sim 49,000\times$** |
-| $T\sb 3$ power lookup | $O(1)$ | $\sim 6.7\,\mu\text{s}$ | $\sim 1.2\text{ ns}$ | **$\sim 5,500\times$** |
+| $T_3$ power lookup | $O(1)$ | $\sim 6.7\,\mu\text{s}$ | $\sim 1.2\text{ ns}$ | **$\sim 5,500\times$** |
 | Witt vector addition ($prec=4$) | $O(\mathrm{prec})$ | $\sim 123.7\,\mu\text{s}$ | $<0.01\text{ ns}$ (Compiler Optimized) | **$>10,000,000\times$** |
 | Witt vector multiplication ($prec=4$) | $O(\mathrm{prec}^2)$ | $\sim 562.2\,\mu\text{s}$ | $\sim 19.4\text{ ns}$ | **$\sim 29,000\times$** |
 | NTT ($N = 4$) | $O(N \log N)$ | $\sim 108.7\,\mu\text{s}$ | $\sim 282\text{ ns}$ | **$\sim 385\times$** |
@@ -651,7 +651,7 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 |--------|---------------|
 | `constants.py` | Precomputed algebraic tables: `ETA_POW` (169 powers of $\eta$), `ETA_IPOW` (169 inverse powers), `T3_POW` (168 matrix powers), `INV_TBL` (13,13,13,3 inverse lookup), `P1_MAT` and `P23_MAT` (Sylvester projectors), `S3_MATS` (6 permutation matrices), `_S3_MUL` (6,6 group multiplication table), `_VAL_LUT` (13-adic valuation for $d < 13^5$), NTT twiddle matrices for sizes $[1, 2, 3, 4, 6, 12]$, `_DELTA_MAX_LUT` (Tribonacci mixing time) |
 | `ring.py` | $\mathbb{Z}{13}[\eta]$ arithmetic: `mul`, `add`, `sub`, `neg`, `smul`, `inv`, `pow`, `trace`, `norm`, `conj`, `phi1`, `phi2`. CRT `compose`/`decompose`/`is_unit`. $\mathbb{F}{169}$ arithmetic: `mul`, `norm`, `inv`, `frobenius`, `pow` |
-| `spectral.py` | `proj()` — projector application via matrix multiplication; `t3n()` — $T\sb 3^n$ orbit evolution; `t3n_s3()` — $S\sb 3$-covariant evolution; `SylvesterProjectors.p1/p23/split`; `SpectralDecomposition.evolve/eigenvalue_dominant`; `S3Galois.apply/compose_indices/orbit/casimir` |
+| `spectral.py` | `proj()` — projector application via matrix multiplication; `t3n()` — $T_3^n$ orbit evolution; `t3n_s3()` — $S_3$-covariant evolution; `SylvesterProjectors.p1/p23/split`; `SpectralDecomposition.evolve/eigenvalue_dominant`; `S3Galois.apply/compose_indices/orbit/casimir` |
 
 ### Kernel and Geometry
 
@@ -679,7 +679,7 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | `gqm.py` | `GQMState` — quantum state with `evolve`, `hamiltonian`, `born_probs`, `inner`, `density`, `ntt_spectrum`, `entropy`. `ErrorCache` — correction accumulation with `absorb` and `spectral_correction`. `DensityMatrix` — `build`, `trace`, `mat_mul`, `evolve`, `entropy`. `ZetaSelf` — persistent self-state with `evolve`, `reflect`, `is_my_experience` |
 | `zeta_func.py` | `ZetaFunctionRing` — `zeta`, `zeta_batch`, `ntt_identity`, `functional_eq`. `SpectralFlow` — `dominant`, `subdominant`, `ntt_spectrum`, `chern_proxy`, `winding`, `critical_indices`. `SpectralZeta` — `zeta`, `connection_to_zeta_ring` |
 | `dirac.py` | `AdelicDiracOperator` — antisymmetric Dirac operator $D[i,j] = (\eta^{i-j} - \eta^{j-i}) \cdot G(i,j)$. `matrix`, `chiral_check`, `spectrum`, `zeros_of_zeta`, `rh_check` |
-| `berry.py` | `BerrySVD` — Berry connection via $P\sb 1$ projectors, algebraic SVD proxy via NTT spectrum: `connection`, `phase`, `svd_proxy`, `dominant_mode` |
+| `berry.py` | `BerrySVD` — Berry connection via $P_1$ projectors, algebraic SVD proxy via NTT spectrum: `connection`, `phase`, `svd_proxy`, `dominant_mode` |
 | `entanglement.py` | `EntanglementGeometry` — `ryu_takayanagi`, `wormhole_entropy`, `page_curve`, `state_entropy`, `info_conservation` with central charge $\Delta = 2$ |
 | `crystal.py` | `CrystalLattice` — `unit_cell`, `dominant_sublattice`, `structure_factor`, `reciprocal`, `voronoi` |
 
@@ -691,14 +691,14 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | `attention.py` | `SpectralAttention` — Sylvester channel split, tree kernel mixing (fast/standard), local Q/K/V projections, Born normalization, residual + Laplacian + HilbertEta layer norm |
 | `hybrid.py` | `S3ParallelAttention` — simultaneous evaluation of 6 Galois-conjugate orbits with `evolve_parallel` and `casimir_reduce`. Full parallel attention pipeline |
 | `model.py` | `ZetaModel` — multi-layer architecture ($V=256, D=54, N=11$ default) with Witt head (PREC=4), fast kernel dispatch, convergent decay, autonomous Hensel lift, S3 orbit cycling, ErrorCache integration |
-| `mera.py` | `MERAChunker` — `coarse_grain` (3 fixed levels), `coarse_grain_dynamic` (auto-depth $\lfloor \log\sb 2 L \rfloor$, cap 10), `ntt_per_level`, `renormalize` |
+| `mera.py` | `MERAChunker` — `coarse_grain` (3 fixed levels), `coarse_grain_dynamic` (auto-depth $\lfloor \log_2 L \rfloor$, cap 10), `ntt_per_level`, `renormalize` |
 
 ### Learning and Autonomy
 
 | Module | Responsibility |
 |--------|---------------|
 | `buchberger.py` | `BuchbergerEngine` — `error_ideal`, `nullstellensatz_correction` (vectorized scatter update with target boost and pred suppression), `groebner_reduce`. Phase factor $\eta^{7 \cdot \text{step}}$ |
-| `goal.py` | `ZetaGoalPlanner` — `distance` ($N(P\sb 1 \cdot (\text{state} - \text{goal}))$), `plan` (168-step orbit search with channel selection: direct / $P\sb 1$ / $P{23}$ / none+lift) |
+| `goal.py` | `ZetaGoalPlanner` — `distance` ($N(P_1 \cdot (\text{state} - \text{goal}))$), `plan` (168-step orbit search with channel selection: direct / $P_1$ / $P{23}$ / none+lift) |
 | `entropy.py` | `EntropyMonitor` — `check` (threshold $S{\max}=10$), `lift_if_needed` |
 | `scaler.py` | `ZetaScaler` — `observe` (24-step history), `decide` (Witt full / S3 orbit / dynamic MERA / lift recommendation), `reset_orbit` |
 | `autonomy.py` | `AutonomousLoop` — closed-loop control with persistent `ZetaSelf`, goal planning, entropy monitoring, scaling, and reflection. `FullAutonomyCycle` — simplified single-cycle variant |
@@ -708,7 +708,7 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | Module | Responsibility |
 |--------|---------------|
 | `orbit.py` | `OrbitPlanner` — `plan_orbit_vec`/`plan_orbit` (168-step vectorized search), `orbit_spectrum`, `closure_check` |
-| `reversible.py` | `ReversibleGenerator` — `encode` ($T\sb 3^t \cdot x\sb t$), `decode` ($T\sb 3^{168-t} \cdot y\sb t$), `roundtrip_check` |
+| `reversible.py` | `ReversibleGenerator` — `encode` ($T_3^t \cdot x_t$), `decode` ($T_3^{168-t} \cdot y_t$), `roundtrip_check` |
 | `rollback.py` | `QuantumRollback` — `detect`, `rollback_ring`, `rollback_witt`, `correction_spectrum` |
 | `counterfactual.py` | `CounterfactualBranch` — `branch`, `best_branch`, `gqm_superposition` |
 | `ardt.py` | `ARDTArchitecture` — 5-step algebraic reasoning chain: `perceive`, `reason`, `plan`, `act`, `verify` |
@@ -822,15 +822,15 @@ $env:PYTHONIOENCODING="utf-8"; python legacy/run_bench.py
 
 ## 20. Bibliography
 
-1. **Tribonacci Polynomials and Cubic p-adic Integers.** The arithmetic of finite extensions $\mathbb{Z}\sb p[\eta]/(f(\eta))$ where $f(x) = x^3 - x^2 - x - 1$, including unit group structure, period computation, and factorisation criteria over $\mathbb{F}\sb p$.
+1. **Tribonacci Polynomials and Cubic p-adic Integers.** The arithmetic of finite extensions $\mathbb{Z}_p[\eta]/(f(\eta))$ where $f(x) = x^3 - x^2 - x - 1$, including unit group structure, period computation, and factorisation criteria over $\mathbb{F}_p$.
 
 2. **Sylvester Spectral Decomposition.** Matrix spectral theory via Lagrange interpolation of the minimal polynomial, with application to unimodular matrices in $\mathrm{SL}(3, \mathbb{Z})$ and their reduction modulo $p$.
 
-3. **Bruhat-Tits Trees and Ultrametric Geometry.** The geometry of $\mathrm{GL}(2, \mathbb{Q}\sb p)$ and its associated Bruhat-Tits building, strong triangle inequality, and tree-based kernel methods.
+3. **Bruhat-Tits Trees and Ultrametric Geometry.** The geometry of $\mathrm{GL}(2, \mathbb{Q}_p)$ and its associated Bruhat-Tits building, strong triangle inequality, and tree-based kernel methods.
 
 4. **Hensel Lifting and Witt Vectors.** Precision-adaptive arithmetic in p-adic extensions, construction of Witt vectors $\mathbb{W}(k)$, ghost component algebra, and Teichmüller representatives.
 
-5. **Number Theoretic Transform over Finite Rings.** Fast convolution algorithms in rings of the form $\mathbb{Z}\sb p[\eta]/(f(\eta))$, including primitive root selection and inverse transform verification.
+5. **Number Theoretic Transform over Finite Rings.** Fast convolution algorithms in rings of the form $\mathbb{Z}_p[\eta]/(f(\eta))$, including primitive root selection and inverse transform verification.
 
 6. **Buchberger Algorithm and Effective Nullstellensatz.** Gröbner basis computation in multivariate polynomial rings, ideal membership testing, and constructive Hilbert Nullstellensatz for error correction.
 
