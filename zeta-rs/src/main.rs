@@ -77,7 +77,7 @@ fn main() {
     let kernel_tree_ms = t0.elapsed().as_secs_f64() * 1000.0 / 100.0;
     
     let mut ntt_us = vec![];
-    for &n_size in &[4, 7, 12, 14, 28] {
+    for &n_size in &[4, 12] {
         let mut x = vec![Z13Eta::ZERO; n_size];
         for i in 0..n_size {
             x[i] = ETA_POW[i];
