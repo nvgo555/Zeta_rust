@@ -1,4 +1,8 @@
-# Zeta p-Adic Integer AI — Module Reference Document v7.0.0
+# Zeta p-Adic Integer AI — Module Reference Document v7.0.0 (Experimental Unofficial)
+
+> **⚠️ Disclaimer:** This is an **experimental unofficial version** of the original Zeta Edit project.  
+> This repository is not affiliated with, endorsed by, or maintained by the original Zeta Edit authors.  
+> Use at your own risk. Features may differ from the official version.
 
 **Complete Algebraic Specification of All 39 System Modules**
 

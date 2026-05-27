@@ -1,4 +1,35 @@
-__pycache__/
+```
+# Compiled and build artifacts
 *.pyc
-*.pyo
-.DS_Store
+__pycache__/
+*.o
+*.obj
+dist/
+build/
+*.egg-info/
+
+# Dependencies
+.venv/
+venv/
+.env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Editors
+.vscode/
+.idea/
+
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# Distribution / packaging
+*.egg
+*.whl
+```

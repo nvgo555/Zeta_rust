@@ -1,4 +1,8 @@
-# Zeta p-Adic Integer AI — System Specification v7.0.0
+# Zeta p-Adic Integer AI — System Specification v7.0.0 (Experimental Unofficial)
+
+> **⚠️ Disclaimer:** This is an **experimental unofficial version** of the original Zeta Edit project.  
+> This repository is not affiliated with, endorsed by, or maintained by the original Zeta Edit authors.  
+> Use at your own risk. Features may differ from the official version.
 
 **Algebraic Artificial Intelligence over the Cubic p-Adic Integer Ring**
 
