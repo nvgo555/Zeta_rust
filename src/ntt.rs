@@ -3,7 +3,7 @@
 //! Implements $O(N \log N)$ polynomial multiplication over $\mathbb{Z}_{13}[\eta]$.
 //! The transform operates over roots of unity of order dividing 168.
 
-use ndarray::{Array1, Array2};
+
 use crate::ring::{P, Z13Eta};
 
 pub const NTT_VALID: [usize; 6] = [1, 2, 3, 4, 6, 12];

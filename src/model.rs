@@ -3,8 +3,7 @@
 //! Connects the embeddings, attention layers, and Buchberger learning engine into 
 //! a cohesive state machine operating entirely within $\mathbb{Z}_{13}[\eta]$.
 
-use ndarray::{Array2, Array3, Zip};
-use ndarray::parallel::prelude::*;
+use ndarray::{Array2, Array3};
 use std::cmp::min;
 use crate::constants::{ETA_POW};
 use crate::ring::{Z13Eta, ORD};

@@ -25,7 +25,7 @@ pub fn ring_lin(x: &Array3<Z13Eta>, w: &Array2<Z13Eta>) -> Array3<Z13Eta> {
 
 pub fn born_norm(s: &mut Array4<Z13Eta>) {
     let shape = s.shape();
-    let (b, lq, lk, d) = (shape[0], shape[1], shape[2], shape[3]);
+    let (b, lq, lk, _) = (shape[0], shape[1], shape[2], shape[3]);
     for i in 0..b {
         for j in 0..lq {
             let mut row = Vec::with_capacity(lk);

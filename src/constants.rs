@@ -1,6 +1,6 @@
 use lazy_static::lazy_static;
 use ndarray::Array3;
-use crate::ring::{Z13Eta, F169, P, ORD};
+use crate::ring::{Z13Eta, P, ORD};
 
 lazy_static! {
     pub static ref ETA_POW: Vec<Z13Eta> = {

@@ -88,7 +88,7 @@ impl PAdicKernel {
                 for j in 0..l {
                     let coarse_j = j / factor;
                     if coarse_j < nb {
-                        let val = sh[[i, coarse_j, d - 1]]; // wait, we map for each d
+
                         for k in 0..d {
                             let up = t3n(&sh[[i, coarse_j, k]], n_inv);
                             let up_w = up * w;

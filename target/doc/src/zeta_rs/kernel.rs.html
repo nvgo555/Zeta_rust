@@ -88,8 +88,8 @@
 <a href=#88 id=88 data-nosnippet>88</a>                <span class="kw">for </span>j <span class="kw">in </span><span class="number">0</span>..l {
 <a href=#89 id=89 data-nosnippet>89</a>                    <span class="kw">let </span>coarse_j = j / factor;
 <a href=#90 id=90 data-nosnippet>90</a>                    <span class="kw">if </span>coarse_j &lt; nb {
-<a href=#91 id=91 data-nosnippet>91</a>                        <span class="kw">let </span>val = sh[[i, coarse_j, d - <span class="number">1</span>]]; <span class="comment">// wait, we map for each d
-<a href=#92 id=92 data-nosnippet>92</a>                        </span><span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..d {
+<a href=#91 id=91 data-nosnippet>91</a>
+<a href=#92 id=92 data-nosnippet>92</a>                        <span class="kw">for </span>k <span class="kw">in </span><span class="number">0</span>..d {
 <a href=#93 id=93 data-nosnippet>93</a>                            <span class="kw">let </span>up = t3n(<span class="kw-2">&amp;</span>sh[[i, coarse_j, k]], n_inv);
 <a href=#94 id=94 data-nosnippet>94</a>                            <span class="kw">let </span>up_w = up * w;
 <a href=#95 id=95 data-nosnippet>95</a>                            <span class="kw">let </span>up_sub = SylvesterProjectors::p23(<span class="kw-2">&amp;</span>up_w);

@@ -3,8 +3,8 @@
 <a href=#3 id=3 data-nosnippet>3</a>//! Implements $O(N \log N)$ polynomial multiplication over $\mathbb{Z}_{13}[\eta]$.
 <a href=#4 id=4 data-nosnippet>4</a>//! The transform operates over roots of unity of order dividing 168.
 <a href=#5 id=5 data-nosnippet>5</a>
-<a href=#6 id=6 data-nosnippet>6</a></span><span class="kw">use </span>ndarray::{Array1, Array2};
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span><span class="kw">crate</span>::ring::{P, Z13Eta};
+<a href=#6 id=6 data-nosnippet>6</a>
+<a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">use </span><span class="kw">crate</span>::ring::{P, Z13Eta};
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub const </span>NTT_VALID: [usize; <span class="number">6</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">12</span>];
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub const </span>NTT_SCALAR: [u8; <span class="number">13</span>] = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">12</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>]; <span class="comment">// 1=&gt;1, 2=&gt;12, 3=&gt;3, 4=&gt;8, 6=&gt;4, 12=&gt;2

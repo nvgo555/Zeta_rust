@@ -77,7 +77,7 @@ fn main() {
     }
     let t3_lookup_ns = t0.elapsed().as_secs_f64() * 1_000_000_000.0 / 100_000.0;
     
-    let mut x_test = Array3::from_elem((1, l, 8), Z13Eta::ZERO); 
+    let x_test = Array3::from_elem((1, l, 8), Z13Eta::ZERO); 
     let t0 = Instant::now();
     for _ in 0..100 {
         PAdicKernel::apply(&x_test); 
