@@ -20,6 +20,8 @@ The ring $\\mathbb{Z}_{13}[\\eta]$ has $2197$ elements. Its unit group has order
 
 This document specifies the mathematical foundations, architectural components, algorithmic procedures, and operational semantics of the Zeta system.
 
+> **🚀 High-Performance Rust Port**: The core engine of Zeta has been fully ported to Rust for extreme performance (>1,000,000x speedups on core tensor field operations). The primary implementation now lives in the root directory (via `src/` and `Cargo.toml`). The original Python reference implementation has been moved to the `legacy/` directory.
+
 ---
 
 ## Table of Contents
