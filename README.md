@@ -12,11 +12,11 @@ Official GitHub Repository: [ZetapAdelicAI/Zeta-p-adicAI](https://github.com/Zet
 
 Zeta is a self-contained artificial intelligence system whose entire computational universe is constructed within the finite ring
 
-$$\mathbb{Z}_{13}[\eta] \;\big/\; (\eta^3 - \eta^2 - \eta - 1)$$
+$$\mathbb{Z}{13}[\eta] \;\big/\; (\eta^3 - \eta^2 - \eta - 1)$$
 
 Every tensor, embedding, state transition, kernel evaluation, and learning update is an element of this ring. The system contains no floating-point arithmetic, no gradient descent, no Euclidean metric structures, and no learned real-valued parameters. Instead, dynamics are governed by the unimodular matrix $T_3 \in \mathrm{SL}(3, \mathbb{Z})$, attention by an ultrametric tree kernel derived from the $13$-adic valuation, and learning by the Buchberger-Nullstellensatz algorithm operating on polynomial ideals.
 
-The ring $\mathbb{Z}_{13}[\eta]$ has $2197$ elements. Its unit group has order $2016$, arising from the Chinese Remainder Theorem decomposition $\mathbb{Z}_{13}[\eta] \cong \mathbb{F}_{13} \times \mathbb{F}_{169}$. The multiplicative order of $\eta$ is $168$, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over $\mathbb{F}_{13}$ and a two-dimensional subdominant channel over $\mathbb{F}_{169}$, with the full symmetry of the Galois group $S_3$ acting on the latter.
+The ring $\mathbb{Z}{13}[\eta]$ has $2197$ elements. Its unit group has order $2016$, arising from the Chinese Remainder Theorem decomposition $\mathbb{Z}{13}[\eta] \cong \mathbb{F}_{13} \times \mathbb{F}_{169}$. The multiplicative order of $\eta$ is $168$, giving the system a natural period that governs orbit evolution, positional encoding, and reversible state transitions. Spectral decomposition via Sylvester projectors separates the dynamics into a one-dimensional dominant channel over $\mathbb{F}_{13}$ and a two-dimensional subdominant channel over $\mathbb{F}_{169}$, with the full symmetry of the Galois group $S_3$ acting on the latter.
 
 This document specifies the mathematical foundations, architectural components, algorithmic procedures, and operational semantics of the Zeta system.
 
@@ -27,7 +27,7 @@ This document specifies the mathematical foundations, architectural components, 
 ## Table of Contents
 
 1. [Mathematical Preliminaries](#1-mathematical-preliminaries)
-2. [The Base Ring $\mathbb{Z}_{13}[\eta]$](#2-the-base-ring)
+2. [The Base Ring $\mathbb{Z}{13}[\eta]$](#2-the-base-ring)
 3. [Spectral Theory of $T_3$](#3-spectral-theory-of-t3)
 4. [The Ultrametric Kernel](#4-the-ultrametric-kernel)
 5. [Galois Symmetry and the $S_3$ Action](#5-galois-symmetry)
@@ -67,13 +67,13 @@ $$f(x) = (x - 7)(x^2 + 6x + 2)$$
 
 where $x^2 + 6x + 2$ is irreducible over $\mathbb{F}_{13}$. Consequently, by the Chinese Remainder Theorem,
 
-$$\mathbb{Z}_{13}[\eta] \;:=\; \mathbb{F}_{13}[\eta] \;/\; (f(\eta)) \;\cong\; \mathbb{F}_{13} \times \mathbb{F}_{169}$$
+$$\mathbb{Z}{13}[\eta] \;:=\; \mathbb{F}_{13}[\eta] \;/\; (f(\eta)) \;\cong\; \mathbb{F}_{13} \times \mathbb{F}_{169}$$
 
 is a finite ring with $13^3 = 2197$ elements. It is not a field; the factorisation of $f(x)$ implies the existence of zero divisors.
 
 ### 1.3 Representation of Ring Elements
 
-Every element $a \in \mathbb{Z}_{13}[\eta]$ admits a unique representation
+Every element $a \in \mathbb{Z}{13}[\eta]$ admits a unique representation
 
 $$a = a_0 + a_1 \eta + a_2 \eta^2, \qquad a_i \in \mathbb{F}_{13}$$
 
@@ -81,9 +81,9 @@ under the reduction relation $\eta^3 = \eta^2 + \eta + 1$. In computational form
 
 ### 1.4 The Unit Group
 
-The unit group $\mathbb{Z}_{13}[\eta]^\times$ consists of all elements that are units in both CRT components:
+The unit group $\mathbb{Z}{13}[\eta]^\times$ consists of all elements that are units in both CRT components:
 
-$$|\mathbb{Z}_{13}[\eta]^\times| = |\mathbb{F}_{13}^\times| \cdot |\mathbb{F}_{169}^\times| = 12 \cdot 168 = 2016$$
+$$|\mathbb{Z}{13}[\eta]^\times| = |\mathbb{F}_{13}^\times| \cdot |\mathbb{F}_{169}^\times| = 12 \cdot 168 = 2016$$
 
 The element $\eta$ itself is a unit with
 
@@ -93,7 +93,7 @@ This period governs all cyclic structures in the system: embeddings, positional 
 
 ---
 
-## 2. The Base Ring $\mathbb{Z}_{13}[\eta]$
+## 2. The Base Ring $\mathbb{Z}{13}[\eta]$
 
 ### 2.1 Ring Arithmetic
 
@@ -113,7 +113,7 @@ All coefficients taken modulo $13$.
 
 **Multiplicative Inverse.** For $a \neq 0$ with $\mathrm{N}(a) \neq 0$, the inverse is the unique element satisfying $a \cdot a^{-1} = (1, 0, 0)$. All $2016$ inverses are precomputed into the lookup table `INV_TBL` of shape $(13, 13, 13, 3)$ for $O(1)$ retrieval.
 
-**Trace and Norm.** The trace and norm map $\mathbb{Z}_{13}[\eta]$ to $\mathbb{F}_{13}$:
+**Trace and Norm.** The trace and norm map $\mathbb{Z}{13}[\eta]$ to $\mathbb{F}_{13}$:
 
 $$\mathrm{Tr}(a) = a + \sigma(a) + \sigma^2(a), \qquad \mathrm{N}(a) = a \cdot \sigma(a) \cdot \sigma^2(a)$$
 
@@ -185,7 +185,7 @@ For an integer $d \neq 0$, the $13$-adic valuation $v_{13}(d)$ is the largest in
 
 The token interaction kernel is defined for positions $i, j$ in a sequence as:
 
-$$G(i, j) = \eta^{-v_{13}(|i-j|)} \in \mathbb{Z}_{13}[\eta]$$
+$$G(i, j) = \eta^{-v_{13}(|i-j|)} \in \mathbb{Z}{13}[\eta]$$
 
 where the exponent is interpreted modulo $168$ via the `ETA_IPOW` table, and $G(i, i) = \eta^0 = (1, 0, 0)$.
 
@@ -217,7 +217,7 @@ The Galois group of $f(x) = x^3 - x^2 - x - 1$ over $\mathbb{Q}$ is $S_3$, the s
 
 ### 5.2 Permutation Representation
 
-The $S_3$ action on $\mathbb{Z}_{13}[\eta]$ is represented by $3 \times 3$ permutation matrices $\{S_3^{(g)}\}_{g=1}^6$ acting on the coefficient vector $(a_0, a_1, a_2)^T$. The group multiplication table is precomputed as a $(6, 6)$ integer matrix `_S3_MUL` for $O(1)$ composition.
+The $S_3$ action on $\mathbb{Z}{13}[\eta]$ is represented by $3 \times 3$ permutation matrices $\{S_3^{(g)}\}_{g=1}^6$ acting on the coefficient vector $(a_0, a_1, a_2)^T$. The group multiplication table is precomputed as a $(6, 6)$ integer matrix `_S3_MUL` for $O(1)$ composition.
 
 ### 5.3 Conjugation Operator
 
@@ -245,7 +245,7 @@ The `S3ParallelAttention` module evaluates all six orbits simultaneously via ten
 
 **Theorem 6.1.** There is a ring isomorphism:
 
-$$\mathbb{Z}_{13}[\eta] \;\cong\; \mathbb{F}_{13} \times \mathbb{F}_{169}$$
+$$\mathbb{Z}{13}[\eta] \;\cong\; \mathbb{F}_{13} \times \mathbb{F}_{169}$$
 
 induced by the factorisation $f(x) = (x-7)(x^2+6x+2)$ over $\mathbb{F}_{13}$.
 
@@ -253,13 +253,13 @@ induced by the factorisation $f(x) = (x-7)(x^2+6x+2)$ over $\mathbb{F}_{13}$.
 
 ### 6.2 Component Maps
 
-**Dominant projection** $\varphi_1: \mathbb{Z}_{13}[\eta] \to \mathbb{F}_{13}$:
+**Dominant projection** $\varphi_1: \mathbb{Z}{13}[\eta] \to \mathbb{F}_{13}$:
 
 $$\varphi_1(a_0 + a_1 \eta + a_2 \eta^2) = a_0 + 7a_1 + 10a_2$$
 
 since $\varphi_1(\eta) = 7$ and $\varphi_1(\eta^2) = 7^2 = 49 = 10$ in $\mathbb{F}_{13}$.
 
-**Subdominant projection** $\varphi_2: \mathbb{Z}_{13}[\eta] \to \mathbb{F}_{169}$:
+**Subdominant projection** $\varphi_2: \mathbb{Z}{13}[\eta] \to \mathbb{F}_{169}$:
 
 $$\varphi_2(a_0 + a_1 \eta + a_2 \eta^2) = (a_0 + 11a_2) + (a_1 + 7a_2)\xi$$
 
@@ -267,7 +267,7 @@ where $\mathbb{F}_{169} = \mathbb{F}_{13}[\xi]/(\xi^2 + 6\xi + 2)$ and $\xi^2 = 
 
 ### 6.3 Reconstruction
 
-Given $(s, q) \in \mathbb{F}_{13} \times \mathbb{F}_{169}$, the unique preimage $a \in \mathbb{Z}_{13}[\eta]$ is computed via the standard CRT formula using the precomputed Bézout coefficients for the coprime ideals $(\eta - 7)$ and $(\eta^2 + 6\eta + 2)$. The reconstruction formula is:
+Given $(s, q) \in \mathbb{F}_{13} \times \mathbb{F}_{169}$, the unique preimage $a \in \mathbb{Z}{13}[\eta]$ is computed via the standard CRT formula using the precomputed Bézout coefficients for the coprime ideals $(\eta - 7)$ and $(\eta^2 + 6\eta + 2)$. The reconstruction formula is:
 
 $$a = s \cdot (1, 3, 7) + q_0 \cdot (0, 10, 6) + q_1 \cdot (6, 6, 3) \pmod{13}$$
 
@@ -298,7 +298,7 @@ Witt Head   (precision-adaptive output)
 Token Predictions
 ```
 
-All operations are performed in $\mathbb{Z}_{13}[\eta]$ using `torch.long` tensors. No floating-point values exist in the data path.
+All operations are performed in $\mathbb{Z}{13}[\eta]$ using `torch.long` tensors. No floating-point values exist in the data path.
 
 ### 7.2 Design Principles
 
@@ -341,7 +341,7 @@ $$\mathrm{PE}[n, 2k] = \eta^{nk \bmod 168}, \qquad \mathrm{PE}[n, 2k+1] = \eta^{
 
 ### 9.1 Sylvester Channel Split
 
-Given input $X \in \mathbb{Z}_{13}[\eta]^{B \times L \times D}$, the attention layer first projects into spectral channels:
+Given input $X \in \mathbb{Z}{13}[\eta]^{B \times L \times D}$, the attention layer first projects into spectral channels:
 
 $$X_1 = P_1 \cdot X, \qquad X_{23} = P_{23} \cdot X$$
 
@@ -387,7 +387,7 @@ followed by residual connection, discrete Laplacian smoothing, and HilbertEta la
 
 ### 10.1 Witt Vector Construction
 
-The output head stores weights as Witt vectors over $\mathbb{Z}_{13}[\eta]$. A Witt vector of length $m$ is a sequence $(w_0, w_1, \dots, w_{m-1})$ where each $w_k \in \mathbb{Z}_{13}[\eta]$. The ghost components are given by:
+The output head stores weights as Witt vectors over $\mathbb{Z}{13}[\eta]$. A Witt vector of length $m$ is a sequence $(w_0, w_1, \dots, w{m-1})$ where each $w_k \in \mathbb{Z}{13}[\eta]$. The ghost components are given by:
 
 $$w^{(n)} = \sum_{k=0}^{n} 13^k w_k^{13^{n-k}}$$
 
@@ -423,9 +423,9 @@ The number of levels is $\lfloor \log_2 L \rfloor$, capped at $10$. For odd-leng
 
 ### 12.1 State Space
 
-Quantum states are formal sums over the token basis with coefficients in $\mathbb{Z}_{13}[\eta]$:
+Quantum states are formal sums over the token basis with coefficients in $\mathbb{Z}{13}[\eta]$:
 
-$$|\psi\rangle = \sum_{k=0}^{K-1} c_k |k\rangle, \qquad c_k \in \mathbb{Z}_{13}[\eta]$$
+$$|\psi\rangle = \sum_{k=0}^{K-1} c_k |k\rangle, \qquad c_k \in \mathbb{Z}{13}[\eta]$$
 
 ### 12.2 Born Rule
 
@@ -455,7 +455,7 @@ This provides a form of quantum memory that is automatically time-averaged over 
 
 ### 13.1 Error Ideal
 
-For a token position $(b, l)$ with target $v_t$ and prediction $v_p$, the error is embedded into $\mathbb{Z}_{13}[\eta]$ as:
+For a token position $(b, l)$ with target $v_t$ and prediction $v_p$, the error is embedded into $\mathbb{Z}{13}[\eta]$ as:
 
 $$e_{b,l} = (v_t - v_p) \bmod 13$$
 
@@ -579,7 +579,7 @@ The runtime enforces $30$ algebraic axioms organized into $10$ categories. All a
 | Category | Axioms | Assertions |
 |----------|--------|------------|
 | Ring | A001–A009 | Associativity and commutativity of addition and multiplication; distributivity; existence of additive identity $(0,0,0)$ and multiplicative identity $(1,0,0)$; existence of multiplicative inverses for units; characteristic $13$; reduction identity $\eta^3 = \eta^2 + \eta + 1$ |
-| CRT | A010–A011 | Isomorphism $\mathbb{Z}_{13}[\eta] \cong \mathbb{F}_{13} \times \mathbb{F}_{169}$; roundtrip fidelity $\mathrm{CRT}^{-1}(\varphi_1(a), \varphi_2(a)) = a$; $\varphi_1(1) = 1$ |
+| CRT | A010–A011 | Isomorphism $\mathbb{Z}{13}[\eta] \cong \mathbb{F}_{13} \times \mathbb{F}_{169}$; roundtrip fidelity $\mathrm{CRT}^{-1}(\varphi_1(a), \varphi_2(a)) = a$; $\varphi_1(1) = 1$ |
 | $T_3$ | A012–A014 | $\det(T_3) = 1$; $T_3^{168} = I$; $T_3 \cdot P_1 = 7 P_1$ |
 | Sylvester | A015–A019 | Idempotence $P_1^2 = P_1$, $P_{23}^2 = P_{23}$; orthogonality $P_1 P_{23} = 0$; completeness $P_1 + P_{23} = I$; spectral decomposition identity $T_3^n = 7^n P_1 + P_{23} T_3^n$ |
 | $S_3$ | A020–A021 | Group closure: $\forall g, h \in S_3: g \cdot h \in S_3$; involution $J^2 = \mathrm{id}$ |
@@ -650,7 +650,7 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | Module | Responsibility |
 |--------|---------------|
 | `constants.py` | Precomputed algebraic tables: `ETA_POW` (169 powers of $\eta$), `ETA_IPOW` (169 inverse powers), `T3_POW` (168 matrix powers), `INV_TBL` (13,13,13,3 inverse lookup), `P1_MAT` and `P23_MAT` (Sylvester projectors), `S3_MATS` (6 permutation matrices), `_S3_MUL` (6,6 group multiplication table), `_VAL_LUT` (13-adic valuation for $d < 13^5$), NTT twiddle matrices for sizes $[1, 2, 3, 4, 6, 12]$, `_DELTA_MAX_LUT` (Tribonacci mixing time) |
-| `ring.py` | $\mathbb{Z}_{13}[\eta]$ arithmetic: `mul`, `add`, `sub`, `neg`, `smul`, `inv`, `pow`, `trace`, `norm`, `conj`, `phi1`, `phi2`. CRT `compose`/`decompose`/`is_unit`. $\mathbb{F}_{169}$ arithmetic: `mul`, `norm`, `inv`, `frobenius`, `pow` |
+| `ring.py` | $\mathbb{Z}{13}[\eta]$ arithmetic: `mul`, `add`, `sub`, `neg`, `smul`, `inv`, `pow`, `trace`, `norm`, `conj`, `phi1`, `phi2`. CRT `compose`/`decompose`/`is_unit`. $\mathbb{F}_{169}$ arithmetic: `mul`, `norm`, `inv`, `frobenius`, `pow` |
 | `spectral.py` | `proj()` — projector application via matrix multiplication; `t3n()` — $T_3^n$ orbit evolution; `t3n_s3()` — $S_3$-covariant evolution; `SylvesterProjectors.p1/p23/split`; `SpectralDecomposition.evolve/eigenvalue_dominant`; `S3Galois.apply/compose_indices/orbit/casimir` |
 
 ### Kernel and Geometry
@@ -660,13 +660,13 @@ The core engine of Zeta has been ported to Rust for extreme performance. Below i
 | `kernel.py` | `PAdicKernel` — ultrametric tree kernel. `build_tree()` UP pass with `torch.bmm`; `tree_attend()` DOWN pass with `expand+reshape`; `apply_fast()` fused path for $L \leq 169$; `elem()` $O(1)$ single element; `strong_triangle_inequality()` and `batch_triangle_check()` axioms |
 | `laplacian.py` | `PAdicLaplacian` — Vladimirov p-adic Laplacian: `weight_matrix()`, `matrix()`, `apply()`, `ntt_eigendecomp()` |
 | `linear.py` | `ring_lin` — ring-linear transformation; `born_norm` — algebraic normalization; `ring_attend` — ring attention; `laplacian` — discrete Laplacian $\Delta x[i] = x[i+1] + x[i-1] + 11x[i]$; `w_seed` — deterministic $\eta$-power weight seeding; `alg_dropout` — deterministic dropout via $\eta$ powers |
-| `hilbert.py` | `HilbertEta` — algebraic inner product `inner()`, squared norm `norm_sq()`, and layer normalization `layer_norm()` over $\mathbb{Z}_{13}[\eta]$ with $\eta^{-k}$ weights |
+| `hilbert.py` | `HilbertEta` — algebraic inner product `inner()`, squared norm `norm_sq()`, and layer normalization `layer_norm()` over $\mathbb{Z}{13}[\eta]$ with $\eta^{-k}$ weights |
 
 ### Transform and Arithmetic
 
 | Module | Responsibility |
 |--------|---------------|
-| `ntt.py` | Number Theoretic Transform over $\mathbb{Z}_{13}[\eta]$. Valid sizes: $[1, 2, 3, 4, 6, 12]$. Scalar twiddle path. `ntt`, `intt`, `conv`, `spectrum`, `cross`, `autocorr`, `best_size` |
+| `ntt.py` | Number Theoretic Transform over $\mathbb{Z}{13}[\eta]$. Valid sizes: $[1, 2, 3, 4, 6, 12]$. Scalar twiddle path. `ntt`, `intt`, `conv`, `spectrum`, `cross`, `autocorr`, `best_size` |
 | `witt.py` | `WittVector` — Witt vector arithmetic: `from_ring`/`to_ring`, `wadd` (carry propagation), `wneg`, `wsub`, `wmul` (anti-diagonal scatter-add), `wpow` (8-step unrolled), `winv` (Newton iteration), `ghost`, `frobenius`, `teichmuller` |
 | `hensel.py` | `HenselLifter` — Newton iteration for $\eta$ digits in base $13$: `eta_int`, `digits`, `witt_eta`, `verify`. `HenselIO` — sensor/actuator empirical closure: `sensor_embed`, `actuator_decode`, `feedback_check` |
 | `mahler.py` | `MahlerExpansion` — finite difference calculus: `_binom_matrix`, `finite_differences`, `coeffs`, `reconstruct`, `ntt_bridge` |
